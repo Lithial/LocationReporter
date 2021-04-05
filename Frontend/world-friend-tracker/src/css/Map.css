@@ -1,0 +1,9 @@
+.leaflet-container {  
+    width: 100vw;  
+    min-width: 50vh;
+    max-width: 960px;
+    height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
