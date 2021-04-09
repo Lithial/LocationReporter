@@ -1,5 +1,5 @@
 import React from "react";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import { Route, Switch} from "react-router-dom";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Login from "./views/Login";
 import Profile from "./views/Profile";
@@ -17,14 +17,12 @@ function App() {
 
   return (
       <>
-          <BrowserRouter>
-              <NavBar />
-              <Switch>
-                  {/* { <Route exact path={["/", "/home"]} component={Home} /> } */}
-                  <Route exact path="/" component={Login} />
-                  <ProtectedRoute exact path ="/profile" component={Profile} />
-              </Switch>
-          </BrowserRouter>
+          <NavBar />
+          <Switch>
+              {/* { <Route exact path={["/", "/home"]} component={Home} /> } */}
+              <Route exact path="/" component={Login} />
+              <ProtectedRoute exact path ="/profile" component={Profile} />
+          </Switch>
       </>
   );
 }

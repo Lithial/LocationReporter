@@ -15,8 +15,9 @@ export class MapRenderer extends Component{
         super(props);
         this.handleLocationChange = this.handleLocationChange.bind(this);
         this.state = {
-            zoom: 1,
-            currentLocation: [0,0]
+            zoom: 3,
+            currentLocation: [0,0],
+            centerPosition: [5, 176]
         }
     }
 
@@ -38,8 +39,8 @@ export class MapRenderer extends Component{
     render() {
         return (
             <div>
-                <MapContainer center={this.state.currentLocation} zoom={this.state.zoom}
-                              scrollWheelZoom={false}>
+                <MapContainer center={this.state.centerPosition} zoom={this.state.zoom}
+                              scrollWheelZoom={true} >
                     <TileLayer
                         subdomains={["mt0", "mt1", "mt2", "mt3"]}
                         attribution="&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors"

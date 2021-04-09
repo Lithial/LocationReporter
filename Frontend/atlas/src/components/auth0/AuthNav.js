@@ -1,9 +1,9 @@
 import React from "react";
-import AuthenticationButton from "./AuthenticationButton";
+import UserButton from "./UserButton";
 
 const AuthNav = () => (
     <div className="navbar-nav ml-auto">
-      <AuthenticationButton />
+      <UserButton />
     </div>
   );
 export default AuthNav;
