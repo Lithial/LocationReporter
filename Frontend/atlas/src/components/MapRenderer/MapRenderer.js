@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "./MapRenderer.css"
-import mapIcon from "../assets/venue_location_icon.svg"
+import mapIcon from "../../assets/venue_location_icon.svg"
 import L from "leaflet";
 
 const icon = L.icon({
