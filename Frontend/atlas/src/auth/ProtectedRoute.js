@@ -5,13 +5,9 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 const ProtectedRoute = ({ component, ...args }) => (
     <Route 
-    component={withAuthenticationRequired(component,{
-        onRedirecting: () => <LinearProgress />,
-
-    })}
+    component={withAuthenticationRequired(component,{ onRedirecting: () => <LinearProgress />, })}
     {...args}
     />
 );
-
 
 export default ProtectedRoute;
