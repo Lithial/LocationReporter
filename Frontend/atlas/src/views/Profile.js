@@ -1,8 +1,6 @@
 import React from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
-import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-
-import LinearProgress from '@material-ui/core/LinearProgress';
 
 const Profile = () => {
   const { user } = useAuth0();
@@ -32,5 +30,4 @@ const Profile = () => {
   );
 };
 
-//this makes it so authenitcation is required to view this stuff
 export default Profile;

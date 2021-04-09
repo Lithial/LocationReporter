@@ -4,10 +4,6 @@ import 'leaflet/dist/leaflet.css';
 import '../assets/css/Map.css'
 import mapIcon from '../assets/venue_location_icon.svg'
 import L from 'leaflet';
-import { UserContext } from '../contexts/UserContext';
-import { Button } from '@material-ui/core';
-import LocationFinder from './LocationFinder';
-
 
 const icon = L.icon({
     iconUrl: mapIcon,
@@ -15,40 +11,51 @@ const icon = L.icon({
   })   
     
 export class MapRenderer extends Component{
-    static contextType = UserContext //how to user the context
 
     constructor(props){
         super(props);
+        this.handleLocationChange = this.handleLocationChange.bind(this);
         this.state = {
-            zoom: 12,
-            currentLocation: ""
+            zoom: 1,
+            currentLocation: [0,0]
         }
     }
-    
+    componentDidMount(){
+    this.handleLocationChange()
+    }
+    handleLocationChange() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.setState ({
+                currentLocation: [
+                    position.coords.latitude,
+                    position.coords.longitude
+                ]
+            })
+        })
+    }
 
-    render(){
-    const { showLocation, currentLocation } = this.context;
-    console.log("Context:", currentLocation);
-        return(
+    render()
+    {
+        return (
             <div>
-                <MapContainer center={currentLocation} zoom={3} scrollWheelZoom={false}>
-                <TileLayer 
-                subdomains={['mt0','mt1','mt2','mt3']}attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"/>             
-                <Marker 
-                position={currentLocation} 
-                icon={icon}>
-            <Popup>
-                Lithial
-                <br /> 
-                Easily customizable.
-            </Popup>
-            </Marker>
-        </MapContainer>
-        </div>
+                <MapContainer center={this.state.currentLocation} zoom={this.state.zoom}
+                              scrollWheelZoom={false}>
+                    <TileLayer
+                        subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
+                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"/>
+                    <Marker
+                        position={this.state.currentLocation}
+                        icon={icon}>
+                        <Popup>
+                            Lithial
+                            <br/>
+                            Easily customizable.
+                        </Popup>
+                    </Marker>
+                </MapContainer>
+            </div>
         );
-        }
-        
-    
+    }
 }
 export default MapRenderer;
