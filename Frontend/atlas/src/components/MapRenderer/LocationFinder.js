@@ -21,19 +21,24 @@ const LocationFinder = () => {
                     const response = fetch(`https://geocode.xyz/${lat},${lng}?json=1`)
                         .then(response => {
                             if (!response.ok)
-                            setErrorMessage('You made to many requests. Please wait 1 min before trying again')
+                            setErrorMessage('Error Retrieving Data. Please Wait');
                             else
-                                return response.json();
+                                setErrorMessage('')
+                            return response.json();
                         })
                         .then(data => {
                             if(!data)
-                                setErrorMessage('Error reading data!')
-                            console.log("data:", data)
-                            console.log(`You are in ${data?.city} ${data?.country}`);
-                            let location = new Location(data.city, data.country, data.latt, data.longt, data.timezone);
-                            console.log(location);
-                            setAddressData(location);
-                            setCurrentLocation([location.lat,location.lng])
+                                setErrorMessage('Error Reading Data. Please Try Again.')
+                            else{
+                                setErrorMessage('')
+
+                                console.log("data:", data)
+                                console.log(`You are in ${data?.city} ${data?.country}`);
+                                let location = new Location(data.city, data.country, data.latt, data.longt, data.timezone);
+                                console.log(location);
+                                setAddressData(location);
+                                setCurrentLocation([location.lat,location.lng])
+                            }
                         })
                 }
             );
