@@ -6,6 +6,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import PublicSharpIcon from "@material-ui/icons/PublicSharp";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +29,7 @@ export default function ButtonAppBar() {
   return (
     <div className={classes.root}>
       <AppBar className={classes.appBar} position="static">
+
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <PublicSharpIcon />
@@ -35,7 +37,10 @@ export default function ButtonAppBar() {
           <Typography variant="h6" className={classes.title}>
             Atlas
           </Typography>
+            <Link to="/profile">Profile</Link>
+            <Link to="/">Map</Link>
           <AuthNav />
+
         </Toolbar>
       </AppBar>
     </div>

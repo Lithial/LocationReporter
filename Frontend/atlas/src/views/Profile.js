@@ -1,29 +1,71 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import {useCurrentLocation} from "../contexts/LocationContext";
+import {Typography} from "@material-ui/core";
+import {useShowLocation} from "../contexts/ShowLocationContext";
+import Button from "@material-ui/core/Button";
+import LocationMaster from "../components/MapRenderer/LocationMaster";
+import {useAddress} from "../contexts/AddressContext";
 
 const Profile = () => {
   const { user } = useAuth0();
   const { name, picture, email } = user;
 
+  const [currentLocation,setCurrentLocation] = useCurrentLocation();
+  const [showLocation,toggleShowLocation] = useShowLocation();
+  const [addressData, setAddressData] = useAddress();
+
+  useEffect(() =>{
+      return (<LocationMaster />)
+  },[currentLocation])
+
   return (
     <div>
-      <div className="row align-items-center profile-header">
-        <div className="col-md-2 mb-3">
+        <LocationMaster />
+      <div>
+        <div>
           <img
             src={picture}
-            alt="Profile"
-            className="rounded-circle img-fluid profile-picture mb-3 mb-md-0"
+            alt="Profile Picture"
           />
         </div>
-        <div className="col-md text-center text-md-left">
+        <div>
           <h2>{name}</h2>
-          <p className="lead text-muted">{email}</p>
+          <p>{email}</p>
         </div>
       </div>
-      <div className="row">
-        <pre className="col-12 text-light bg-dark p-4">
-          {JSON.stringify(user, null, 2)}
-        </pre>
+      <div>
+        <Typography variant={"body1"}>
+            {
+                "Nickname: " +user.nickname
+            }
+        </Typography>
+      <Typography variant={"body1"}>
+          {
+              "CurrentLocation: " + currentLocation
+          }
+      </Typography>
+      <Typography variant={"body1"}>
+          {
+              "City: " +addressData.city
+          }
+      </Typography>
+      <Typography variant={"body1"}>
+          {
+              "Country: " + addressData.country
+          }
+      </Typography>
+      <Typography variant={"body1"}>
+          {
+              "TimeZone: " + addressData.timezone
+          }
+      </Typography>
+      <Typography variant={"body1"}>
+          {
+              "ShowLocation: " + showLocation
+          }
+      </Typography>
+          <Button onClick={toggleShowLocation}>{"Show Location:"}</Button>
       </div>
     </div>
   );

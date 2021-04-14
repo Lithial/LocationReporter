@@ -17,18 +17,6 @@ const MapRenderer = () => {
         iconSize: [64, 64],
     });
 
-    const findCurrentLocation = function (){
-        navigator.geolocation.getCurrentPosition((position) => {
-            setCurrentLocation(
-                    [ position.coords.latitude,
-                        position.coords.longitude])
-        });
-    }
-
-    useEffect(() =>{
-        findCurrentLocation();
-    },[]);
-
     useEffect(() =>{
 
     },[currentLocation]);
