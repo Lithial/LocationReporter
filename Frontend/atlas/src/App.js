@@ -6,10 +6,11 @@ import Profile from "./views/Profile";
 import NavBar from "./components/NavBar";
 import { LinearProgress } from "@material-ui/core";
 import { useAuth0 } from "@auth0/auth0-react";
+import {useCurrentLocation} from "./contexts/LocationContext";
 
 function App() {
   const { isLoading } = useAuth0();
-
+  const [currentLocation,setCurrentLocation] = useCurrentLocation();
   if(isLoading){
     return <LinearProgress />;
     // @TODO: tweak this to be bigger
