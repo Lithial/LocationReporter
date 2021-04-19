@@ -11,7 +11,6 @@ CREATE TABLE IF NOT EXISTS users(
 const locationTable = `
         CREATE TABLE IF NOT EXISTS locations(
             userId varchar,
-            city varchar,
             country varchar,
             lat varchar,
             lng varchar,
@@ -42,8 +41,8 @@ const locationTable = `
  }
  createLocation = (id, req) => {
      return `
-        INSERT INTO locations (userId, city, country, lat,lng,timezone)
-        VALUES ('${id}','${req.body.location.city}','${req.body.location.country}','${req.body.location.lat}', '${req.body.location.lng}', '${req.body.location.timezone}')
+        INSERT INTO locations (userId, country, lat,lng,timezone)
+        VALUES ('${id}','${req.body.location.country}','${req.body.location.lat}', '${req.body.location.lng}', '${req.body.location.timezone}')
         ON CONFLICT DO NOTHING;`
  }
  updateUser = (id, req) => {
@@ -59,7 +58,6 @@ const locationTable = `
     return `
         UPDATE locations
         SET userID='${id}',
-            city='${req.body.location.city}',
             country='${req.body.location.country}',
             lat='${req.body.location.lat}', 
             lng='${req.body.location.lng}', 

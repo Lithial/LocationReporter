@@ -32,7 +32,7 @@ const getLocal = async () => {
                                 let lat = data.latt.substring(0,data.latt.length -3);
                                 let lng = data.longt.substring(0,data.longt.length -3);
                                 console.log("lat:lng:", lat,lng)
-                                setAddressData(new Location(data.poi.addr_city, data.country, lat, lng, data.timezone));
+                                setAddressData(new Location(data.country, lat, lng, data.timezone));
                                 setCurrentLocation([lat, lng])
                             } else {
                                 setErrorMessage(data.error.message)
