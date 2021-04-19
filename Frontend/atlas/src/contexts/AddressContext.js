@@ -7,7 +7,7 @@ export function useAddress(){
     return useContext(AddressContext);
 }
 export const AddressProvider = ({children}) => {
-        const [addressData,setAddressData] = useState(new Location("","","","",""));
+        const [addressData,setAddressData] = useState(new Location(" "," "," "," "," "));
 
     return (
         <AddressContext.Provider value={[addressData,setAddressData]}>

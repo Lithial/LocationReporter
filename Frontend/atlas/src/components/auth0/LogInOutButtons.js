@@ -2,7 +2,7 @@ import React from "react";
 import {useAuth0} from "@auth0/auth0-react";
 import {Avatar, Button, Menu, MenuItem} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {ExitToApp as ExitToAppIcon, Person as PersonIcon} from "@material-ui/icons";
+import {ExitToApp as ExitToAppIcon, Person as PersonIcon, Public as PublicIcon} from "@material-ui/icons";
 import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -52,6 +52,7 @@ export function UserMenu() {
                 open={Boolean(anchor)}
                 onClose={handleClose}
             >
+                <Link className={styles.links} to="/"><MenuItem><PublicIcon/> Map</MenuItem></Link>
                 <Link className={styles.links} to="/profile"><MenuItem><PersonIcon/> Profile</MenuItem></Link>
                 <MenuItem onClick={() => logout({returnTo: window.location.origin})}><ExitToAppIcon/> Logout</MenuItem>
             </Menu>

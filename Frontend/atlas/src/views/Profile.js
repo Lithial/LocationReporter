@@ -4,25 +4,69 @@ import {useCurrentLocation} from "../contexts/LocationContext";
 import {Typography} from "@material-ui/core";
 import {useShowLocation} from "../contexts/ShowLocationContext";
 import Button from "@material-ui/core/Button";
-import LocationMaster from "../components/MapRenderer/LocationMaster";
 import {useAddress} from "../contexts/AddressContext";
+import TimezoneFinder from "../components/MapRenderer/TimezoneFinder";
+import LocationMaster from "../components/MapRenderer/LocationMaster";
 
 const Profile = () => {
-  const { user } = useAuth0();
-  const { name, picture, email } = user;
+    const {user, getAccessTokenSilently} = useAuth0();
+    const {name, picture} = user;
+    console.log("UserInfo:", user)
+    const [currentLocation, setCurrentLocation] = useCurrentLocation();
+    const [showLocation, toggleShowLocation] = useShowLocation();
+    const [addressData, setAddressData] = useAddress();
 
-  const [currentLocation,setCurrentLocation] = useCurrentLocation();
-  const [showLocation,toggleShowLocation] = useShowLocation();
-  const [addressData, setAddressData] = useAddress();
+    const asyncToggleLocationAndUpdateUI = async () => {
+        try {
+            toggleShowLocation()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const checkAPI = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+            const response = await fetch(`http://localhost:3002/users`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                body: JSON.stringify({
+                    nickname: user.nickname,
+                    picture: user.picture,
+                    location: addressData,
+                    showLocation: showLocation
+                })
+            });
+            const responseData = await response.json();
+        } catch (error) {
+            console.log(error)
+        }
 
-  useEffect(() =>{
-      return (<LocationMaster />)
-  },[currentLocation])
+    }
+    const testAuthorised = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+            const response = await fetch(`http://localhost:3002/authorized`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const responseData = await response.json();
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
   return (
     <div>
         <LocationMaster />
-      <div>
+        <TimezoneFinder />
+        <div>
         <div>
           <img
             src={picture}
@@ -31,7 +75,6 @@ const Profile = () => {
         </div>
         <div>
           <h2>{name}</h2>
-          <p>{email}</p>
         </div>
       </div>
       <div>
@@ -65,7 +108,11 @@ const Profile = () => {
               "ShowLocation: " + showLocation
           }
       </Typography>
-          <Button onClick={toggleShowLocation}>{"Show Location:"}</Button>
+          <Button onClick={asyncToggleLocationAndUpdateUI}>{"Show Location:"}</Button>
+          <Button onClick={checkAPI}>{"Check Auth"}</Button>
+          <Button onClick={testAuthorised}>{"test Auth"}</Button>
+
+
       </div>
     </div>
   );

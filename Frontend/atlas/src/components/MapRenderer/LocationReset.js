@@ -5,7 +5,7 @@ const LocationReset = () => {
 
     const [currentLocation,setCurrentLocation] = useCurrentLocation();
     useEffect(() =>{
-            setCurrentLocation([0,0])
+
     },[])
     return (
         <div>

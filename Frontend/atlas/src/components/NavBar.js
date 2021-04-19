@@ -37,8 +37,6 @@ export default function ButtonAppBar() {
           <Typography variant="h6" className={classes.title}>
             Atlas
           </Typography>
-            <Link to="/profile">Profile</Link>
-            <Link to="/">Map</Link>
           <AuthNav />
 
         </Toolbar>
