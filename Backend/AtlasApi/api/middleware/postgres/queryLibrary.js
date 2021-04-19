@@ -5,8 +5,7 @@ CREATE TABLE IF NOT EXISTS users(
             picture varchar,
             showLocation boolean,
             currentFriendCode varchar
-        );
-`
+        );`
 
 
 const locationTable = `
@@ -18,8 +17,7 @@ const locationTable = `
             lng varchar,
             timezone varchar, 
             FOREIGN KEY (userId) REFERENCES users(userId) on delete cascade on update cascade
-        );
-        `
+        );`
  const friendTable = `
         CREATE TABLE IF NOT EXISTS friends(
             id serial primary key,
@@ -27,8 +25,7 @@ const locationTable = `
             friendId varchar,
             FOREIGN KEY (userId) REFERENCES users(userID) on delete cascade on update cascade,
             FOREIGN KEY (friendId) REFERENCES users(userID) on delete cascade on update cascade    
-        );
-        `
+        );`
  getUser = (id) => {
      return `
         SELECT *
@@ -49,11 +46,44 @@ const locationTable = `
         VALUES ('${id}','${req.body.location.city}','${req.body.location.country}','${req.body.location.lat}', '${req.body.location.lng}', '${req.body.location.timezone}')
         ON CONFLICT DO NOTHING;`
  }
-
+ updateUser = (id, req) => {
+    return `
+        UPDATE users
+        SET userID='${id}',
+            nickname='${req.body.nickname}',
+            picture='${req.body.picture}',
+            showLocation=${req.body.showLocation}
+        WHERE userID = '${id}';`
+}
+ updateLocation = (id, req) => {
+    return `
+        UPDATE locations
+        SET userID='${id}',
+            city='${req.body.location.city}',
+            country='${req.body.location.country}',
+            lat='${req.body.location.lat}', 
+            lng='${req.body.location.lng}', 
+            timezone='${req.body.location.timezone}'
+        WHERE userID = '${id}';`
+}
+deleteUser = (id) => {
+    return `
+        DELETE FROM users
+        WHERE userID = '${id}';`
+}
+deleteLocation = (id) => {
+    return `
+        DELETE FROM locations
+        WHERE userID = '${id}';`
+}
  module.exports = {
      getUser:getUser,
      createUser:createUser,
      createLocation:createLocation,
+     updateUser:updateUser,
+     updateLocation:updateLocation,
+     deleteUser:deleteUser,
+     deleteLocation:deleteLocation,
      userTable,
      locationTable,
      friendTable,

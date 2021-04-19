@@ -7,7 +7,9 @@ module.exports = async function initSettings(app,config) {
     console.log("Loaded express settings");
 
     console.log("Loading postgres database");
-    await databaseInit(app,config)
+    await databaseInit.createDatabase(app,config)
     console.log("Database created");
+
+
 
 }

@@ -23,7 +23,7 @@ const Profile = () => {
             console.log(error)
         }
     }
-    const checkAPI = async () => {
+    const postUser = async () => {
         try {
             const token = await getAccessTokenSilently();
             const response = await fetch(`http://localhost:3002/user`, {
@@ -46,13 +46,50 @@ const Profile = () => {
         }
 
     }
-    const testAuthorised = async () => {
+    const getUser = async () => {
         try {
             const token = await getAccessTokenSilently();
             const response = await fetch(`http://localhost:3002/user`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
+            });
+            const responseData = await response.json();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const updateUser = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+            const response = await fetch(`http://localhost:3002/user`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                mode: 'cors', // no-cors, *cors, same-origin
+                body: JSON.stringify({
+                    nickname: user.nickname,
+                    picture: user.picture,
+                    location: addressData,
+                    showLocation: showLocation
+                })
+            });
+            const responseData = await response.json();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const deleteUser = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+            const response = await fetch(`http://localhost:3002/user`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+                mode: 'cors', // no-cors, *cors, same-origin
             });
             const responseData = await response.json();
         } catch (error) {
@@ -107,8 +144,10 @@ const Profile = () => {
           }
       </Typography>
           <Button onClick={asyncToggleLocationAndUpdateUI}>{"Show Location:"}</Button>
-          <Button onClick={checkAPI}>{"Check Auth"}</Button>
-          <Button onClick={testAuthorised}>{"test Auth"}</Button>
+          <Button onClick={getUser}>{"Get"}</Button>
+          <Button onClick={postUser}>{"Post"}</Button>
+          <Button onClick={updateUser}>{"Update"}</Button>
+          <Button onClick={deleteUser}>{"Delete"}</Button>
 
 
       </div>
