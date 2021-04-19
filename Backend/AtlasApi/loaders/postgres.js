@@ -1,43 +1,41 @@
 const queryLibrary = require('../api/middleware/postgres/queryLibrary')
+const userRoutes = require('../api/routes/userRoutes');
 const { Pool } = require('pg');
+const getConnection = require('./connection');
 
-module.exports = async function createDatabase(app,config) {
-    const pool = new Pool({
-        user: config.pgUser,
-        host: config.pgHost,
-        database: config.pgDb,
-        password: config.pgPass,
-        port: config.pgPort
-    });
-    pool.on('error', (err,client) => {
-        console.error('Unexpected error on idle client', err)
-        process.exit(-1)
-    });
+function createDatabase(app) {
+
+    const pool = getConnection();
+
+    userRoutes(app);
+
     pool.connect((err,client,done) => {
-        if(err) throw err;
-        client.query(queryLibrary.userTable, (err,res) => {
-            if(err) {
+        if (err) throw err;
+        client.query(queryLibrary.userTable, (err, res) => {
+            if (err) {
                 console.log(err.stack);
-            }else{
-                console.log("User Table created successfully");
+            } else {
+                console.log("User table created successfully");
             }
         });
-        client.query(queryLibrary.locationTable, (err,res) => {
-
-            if(err) {
+        client.query(queryLibrary.locationTable, (err, res) => {
+            if (err) {
                 console.log(err.stack);
-            }else{
-                console.log("Location Table created successfully");
+            } else {
+                console.log("Location table created successfully");
             }
         });
-        client.query(queryLibrary.friendTable, (err,res) => {
-            done();
-
-            if(err) {
+        client.query(queryLibrary.friendTable, (err, res) => {
+            if (err) {
                 console.log(err.stack);
-            }else{
-                console.log("Friends Table created successfully");
+            } else {
+                console.log("Friend table created successfully");
             }
-        })
+        });
+        done();
     })
+
 }
+module.exports = {
+    createDatabase:createDatabase
+};

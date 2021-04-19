@@ -23,8 +23,6 @@ module.exports = Config = {
     pgDb: process.env.POSTGRESDATABASE,
     pgPass: process.env.POSTGRESPASSWORD,
     pgPort: process.env.POSTGRESPORT,
-    pgIdleTimeout: process.env.POSTGRESIDLETIMEOUT,
-    pgConnectTimeout: process.env.POSTGRESIDLETIMEOUT,
 
     /*
     Auth0 stuffs

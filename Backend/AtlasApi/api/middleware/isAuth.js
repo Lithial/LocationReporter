@@ -27,6 +27,7 @@ const getTokenFromHeader = req => {
     }
     return null;
 };
+
 const isAuth = jwt({
     secret:jwksRsa.expressJwtSecret({
         cache:true,
@@ -37,8 +38,6 @@ const isAuth = jwt({
     audience: config.audience,
     issuer:`https://${config.domain}/`,
     algorithms:[`${config.jwtAlgorithm}`],
-    userProperty:'token',
-    getToken: getTokenFromHeader,
 });
 
 module.exports = isAuth;

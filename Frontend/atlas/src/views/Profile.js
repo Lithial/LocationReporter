@@ -26,15 +26,13 @@ const Profile = () => {
     const checkAPI = async () => {
         try {
             const token = await getAccessTokenSilently();
-            const response = await fetch(`http://localhost:3002/users`, {
+            const response = await fetch(`http://localhost:3002/user`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
                 mode: 'cors', // no-cors, *cors, same-origin
-                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: 'same-origin', // include, *same-origin, omit
                 body: JSON.stringify({
                     nickname: user.nickname,
                     picture: user.picture,
@@ -51,7 +49,7 @@ const Profile = () => {
     const testAuthorised = async () => {
         try {
             const token = await getAccessTokenSilently();
-            const response = await fetch(`http://localhost:3002/authorized`, {
+            const response = await fetch(`http://localhost:3002/user`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
