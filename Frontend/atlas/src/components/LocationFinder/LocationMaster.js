@@ -1,23 +1,19 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useShowLocation} from "../../contexts/ShowLocationContext";
 import LocationFinder from "./LocationFinder";
 import LocationReset from "./LocationReset";
 import {useUser} from "../../contexts/UserContext";
 
 const LocationMaster = () => {
-    const [userModel, setUserModel] = useUser()
+    const {showLocation,updateLocation} = useUser()
 
-    useEffect(() =>{
-        console.log("Location Master");
-    },[userModel.showLocation])
-
-
-    if(userModel.showLocation){
+    if(showLocation && updateLocation){
         return <LocationFinder/>
     }
-    else {
-        return <LocationReset/>
-    }
+    return <div>
+
+    </div>
+
 };
 
 export default LocationMaster;
