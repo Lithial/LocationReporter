@@ -1,20 +1,40 @@
-import React, {useContext, useEffect, useState} from 'react';
-import UserModel from "../models/UserModel";
-import {LocationModel} from "../models/LocationModel"
+import React, {useContext, useState} from 'react';
 const UserContext = React.createContext();
 
 export function useUser(){
     return useContext(UserContext);
 }
 export const UserProvider = ({children}) => {
-    const [user,setUser] = useState(
-        localStorage.getItem("user") ||
-        new UserModel("","",new LocationModel("","","","",""),"", '')
-    );
-    const [userLoaded, setUserLoaded] = useState(true);
+    const [nickname, setNickname] = useState('');
+    const [picture, setPicture] = useState('');
+    const [showLocation, setShowLocation] = useState(false);
+    const [friendCode, setFriendCode] = useState('');
+    const [country, setCountry] = useState('');
+    const [lat, setLat] = useState('');
+    const [lng, setLng] = useState('');
+    const [currentCoords, setCurrentCoords] = useState([lat,lng]);
+    const [timezone, setTimezone] = useState('');
+    const [userLoaded, setUserLoaded] = useState(false);
+    const [recentChange, setRecentChange] = useState(true);
+    const [updateLocation, setUpdateLocation] = useState(false);
+
+    const UserModel = React.useMemo(() => ({
+            nickname, setNickname,
+            picture,setPicture,
+            showLocation,setShowLocation,
+            friendCode,setFriendCode,
+            country,setCountry,
+            lat,setLat,
+            lng,setLng,
+            currentCoords,setCurrentCoords,
+            timezone,setTimezone,
+            userLoaded,setUserLoaded,
+            recentChange,setRecentChange,
+            updateLocation, setUpdateLocation,
+    }),[nickname,picture,showLocation,friendCode,country,lat,lng,currentCoords,timezone,userLoaded,recentChange,updateLocation])
 
     return (
-        <UserContext.Provider value={[user,setUser,userLoaded,setUserLoaded]}>
+        <UserContext.Provider value={UserModel}>
             {children}
         </UserContext.Provider>
     )

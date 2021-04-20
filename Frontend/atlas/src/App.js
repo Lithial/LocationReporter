@@ -1,10 +1,10 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { Route, Switch} from "react-router-dom";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Login from "./views/Login";
 import Profile from "./views/Profile";
 import NavBar from "./components/NavBar";
-import {LinearProgress, Typography} from "@material-ui/core";
+import {LinearProgress} from "@material-ui/core";
 import { useAuth0 } from "@auth0/auth0-react";
 import ErrorAlert from "./components/auth0/ErrorAlert";
 import {useUser} from "./contexts/UserContext";

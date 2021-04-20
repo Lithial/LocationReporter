@@ -4,7 +4,7 @@ import {useUser} from "../../contexts/UserContext";
 
 const LocationFinder = () => {
 
-    const {showLocation,setCountry, setLat, setLng, setCurrentCoords, setTimezone, setRecentChange, updateLocation, setUpdateLocation} = useUser();
+    const {setCountry, setLat, setLng, setCurrentCoords, setTimezone, setRecentChange, updateLocation, setUpdateLocation} = useUser();
     const [errorMessage, setErrorMessage] = useErrors();
 
 const GetLocationCoords = () => {

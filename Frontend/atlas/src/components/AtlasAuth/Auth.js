@@ -1,66 +1,59 @@
 import {useAuth0} from "@auth0/auth0-react";
 import {useUser} from "../../contexts/UserContext";
 import GetUser from "../../api/UserCalls";
-import {LocationModel} from "../../models/LocationModel";
-import UserModel from "../../models/UserModel";
-import {useEffect} from "react";
-import {useCurrentLocation} from "../../contexts/LocationContext";
-import {useShowLocation} from "../../contexts/ShowLocationContext";
-import {useAddress} from "../../contexts/AddressContext";
+import {useMemo} from "react";
 
 function Auth(){
     const { user } = useAuth0();
-    const { name } = user || {}
-    const { picture } = user || {};
     const { isAuthenticated, getAccessTokenSilently } = useAuth0();
-    const [userModel, setUserModel, isUserLoading, setUserLoading] = useUser();
-    const [currentLocation, setCurrentLocation] = useCurrentLocation();
-    const [showLocation, toggleShowLocation] = useShowLocation();
-    const [addressData, setAddressData] = useAddress();
+    const {
+        userLoaded,
+        setNickname,
+        setPicture,
+        setShowLocation,
+        setFriendCode,
+        setCountry,
+        setLat,
+        setLng,
+        setCurrentCoords,
+        setTimezone,
+        setUserLoaded,
+        setRecentChange
+} = useUser();
+
 
     const GetUserFunction = () => {
+        console.log("Getting user info!");
         GetUser(getAccessTokenSilently,(data =>
             {
-                let locationData = new LocationModel('','','','');
-                let userData = new UserModel('','','', showLocation,'')
-                if(data!==null && isAuthenticated){
+                if(data!==null && isAuthenticated && !userLoaded){
                     console.log("data:", data)
-                    userData.nickname = user.name || "";
-                    userData.picture = user.picture || "";
-                    userData.showLocation = data.showLocation || showLocation;
-                    userData.friendCode = data.friendCode;
-                    locationData.country = data.country;
-                    locationData.lat = data.lat;
-                    locationData.lng = data.lng;
-                    locationData.timezone = data.timezone;
-                    userData.location = locationData;
-                    setUserModel(userData);
-                    if(!showLocation && userData.showLocation){
-                        toggleShowLocation();
-                    }
-                    if(!locationData.lat || !locationData.timezone){
-                        setAddressData(locationData);
-                    }
-                    if(locationData.lat && locationData.lng){
-                        setCurrentLocation([locationData.lat , locationData.lng])
-                    }
-                    setUserLoading(false);
+                    setNickname(user.name);
+                    setPicture(user.picture);
+                    console.log("Auth User Show Location:", data.showlocation)
+                    setShowLocation(JSON.parse(data.showlocation));
+                    setFriendCode(data.currentfriendcode);
+                    setCountry(data.country);
+                    setLat(data.lat);
+                    setLng(data.lng);
+                    setTimezone(data.timezone);
+                    setCurrentCoords([data.lat,data.lng]);
+                    setUserLoaded(true);
                 }
                 else if(isAuthenticated){
-                    userData.nickname = user.name || "";
-                    userData.picture = user.picture || "";
-                    userData.showLocation = false;
-                    userData.friendCode = "";
-                    setUserModel(userData)
+                    setNickname(user.name);
+                    setPicture(user.picture);
+                    setShowLocation(user.showLocation);
                 }
                 else{
                     console.log("No authentication to create user from");
                 }
+                setRecentChange(Date.now());
             }
         ));
     };
 
-    useEffect(()=>{
+    useMemo(()=>{
         GetUserFunction()
     },[])
 

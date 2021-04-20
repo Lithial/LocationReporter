@@ -1,7 +1,5 @@
-import React, {useEffect, useMemo} from 'react';
-import {useShowLocation} from "../../contexts/ShowLocationContext";
+import React from 'react';
 import LocationFinder from "./LocationFinder";
-import LocationReset from "./LocationReset";
 import {useUser} from "../../contexts/UserContext";
 
 const LocationMaster = () => {

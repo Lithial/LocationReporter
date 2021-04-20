@@ -3,8 +3,6 @@ import ProfilePicture from "./ProfilePicture";
 import ProfileTextElement from "./ProfileTextElement";
 import {useUser} from "../../contexts/UserContext";
 import LocationMaster from "../LocationFinder/LocationMaster";
-import TimezoneFinder from "../TimezoneFinder";
-import LocationFinder from "../LocationFinder/LocationFinder";
 
 const ProfileElements = () => {
     const {

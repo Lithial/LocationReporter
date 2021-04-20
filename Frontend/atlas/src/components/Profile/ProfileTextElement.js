@@ -1,5 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
-import {useUser} from "../../contexts/UserContext";
+import React from 'react';
 import {Typography} from "@material-ui/core";
 
 const ProfileTextElement = (props) => {

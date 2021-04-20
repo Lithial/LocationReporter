@@ -1,6 +1,5 @@
 
 import {API_BASE_URL, API_LOCATION_ENDPOINT, API_USERS_ENDPOINT} from "../config/Config";
-import Login from "../views/Login";
 
 async function GetUser (getAccessTokenSilently, callback) {
     try {

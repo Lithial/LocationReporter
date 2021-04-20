@@ -1,7 +1,7 @@
 import React from "react";
 import MapRenderer from "../components/MapRenderer/MapRenderer";
 
-export default function Login(props) {
+export default function Login() {
     return (
         <React.Fragment>
             <MapRenderer />
