@@ -2,13 +2,17 @@ import React, {useEffect} from 'react';
 import {useShowLocation} from "../../contexts/ShowLocationContext";
 import LocationFinder from "./LocationFinder";
 import LocationReset from "./LocationReset";
+import {useUser} from "../../contexts/UserContext";
 
 const LocationMaster = () => {
-    const [showLocation, setShowLocation] = useShowLocation()
-    useEffect(() =>{
+    const [userModel, setUserModel] = useUser()
 
-    },[showLocation])
-    if(showLocation){
+    useEffect(() =>{
+        console.log("Location Master");
+    },[userModel.showLocation])
+
+
+    if(userModel.showLocation){
         return <LocationFinder/>
     }
     else {

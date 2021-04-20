@@ -7,12 +7,14 @@ import NavBar from "./components/NavBar";
 import {LinearProgress, Typography} from "@material-ui/core";
 import { useAuth0 } from "@auth0/auth0-react";
 import ErrorAlert from "./components/auth0/ErrorAlert";
+import {useUser} from "./contexts/UserContext";
+import Auth from "./components/AtlasAuth/Auth";
 
 function App() {
-  const { isLoading } = useAuth0();
+    const { isLoading, isAuthenticated } = useAuth0();
+    const {isUserLoading} = useUser();
 
-
-  if(isLoading){
+  if(isLoading || isUserLoading){
     return <LinearProgress />;
     // @TODO: tweak this to be bigger
   }
@@ -21,7 +23,7 @@ function App() {
       <>
           <NavBar />
           <ErrorAlert/>
-
+          <Auth />
           <Switch>
               {/* { <Route exact path={["/", "/home"]} component={Home} /> } */}
               <Route exact path="/" component={Login} />

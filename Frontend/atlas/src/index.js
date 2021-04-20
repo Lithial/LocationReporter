@@ -8,21 +8,24 @@ import LocationProvider from "./contexts/LocationContext";
 import ShowLocationProvider from "./contexts/ShowLocationContext";
 import AddressProvider from "./contexts/AddressContext";
 import ErrorContext from "./contexts/ErrorContext";
+import UserContext from "./contexts/UserContext";
 
 ReactDOM.render(
   <>
       <BrowserRouter>
           <Auth0ProviderWithHistory>
               <CssBaseline />
-              <ErrorContext>
-                  <AddressProvider>
-                      <ShowLocationProvider>
-                          <LocationProvider>
-                              <App/>
-                          </LocationProvider>
-                      </ShowLocationProvider>
-                  </AddressProvider>
-              </ErrorContext>
+              <UserContext>
+                  <ErrorContext>
+                      <AddressProvider>
+                          <ShowLocationProvider>
+                              <LocationProvider>
+                                  <App/>
+                              </LocationProvider>
+                          </ShowLocationProvider>
+                      </AddressProvider>
+                  </ErrorContext>
+              </UserContext>
           </Auth0ProviderWithHistory>
       </BrowserRouter>
   </>,

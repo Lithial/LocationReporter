@@ -4,7 +4,8 @@ import "leaflet/dist/leaflet.css";
 import "./MapRenderer.css"
 import mapIcon from "../../assets/venue_location_icon.svg"
 import L from "leaflet";
-import {useCurrentLocation} from "../../contexts/LocationContext";
+import {useCurrentLocation} from "../../contexts/LocationContext"
+
 /*These imports need to be in this order for the map to load properly*/
 
 const MapRenderer = () => {

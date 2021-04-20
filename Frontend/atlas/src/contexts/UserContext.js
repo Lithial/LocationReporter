@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import UserModel from "../models/UserModel";
-import {Location} from "../models/LocationModel"
+import {LocationModel} from "../models/LocationModel"
 const UserContext = React.createContext();
 
 export function useUser(){
@@ -9,16 +9,12 @@ export function useUser(){
 export const UserProvider = ({children}) => {
     const [user,setUser] = useState(
         localStorage.getItem("user") ||
-        new UserModel("","",new Location("","","","",""),"", '')
+        new UserModel("","",new LocationModel("","","","",""),"", '')
     );
-    console.log("user:", user);
-
-    useEffect(() =>{
-        localStorage.setItem('user', user);
-    },[user]);
+    const [userLoaded, setUserLoaded] = useState(true);
 
     return (
-        <UserContext.Provider value={[user,setUser]}>
+        <UserContext.Provider value={[user,setUser,userLoaded,setUserLoaded]}>
             {children}
         </UserContext.Provider>
     )

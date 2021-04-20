@@ -1,24 +1,27 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import {useCurrentLocation} from "../contexts/LocationContext";
-import {Typography} from "@material-ui/core";
-import {useShowLocation} from "../contexts/ShowLocationContext";
 import Button from "@material-ui/core/Button";
-import {useAddress} from "../contexts/AddressContext";
-import TimezoneFinder from "../components/MapRenderer/TimezoneFinder";
-import LocationMaster from "../components/MapRenderer/LocationMaster";
+import TimezoneFinder from "../components/TimezoneFinder";
+import LocationMaster from "../components/LocationFinder/LocationMaster";
+import {useUser} from "../contexts/UserContext";
+import ProfilePicture from "../components/Profile/ProfilePicture";
+import ProfileTextElement from "../components/Profile/ProfileTextElement";
 
 const Profile = () => {
-    const {user, getAccessTokenSilently} = useAuth0();
-    const {name, picture} = user;
-    console.log("UserInfo:", user)
+    const {getAccessTokenSilently} = useAuth0();
+    const [userModel, setUserModel] = useUser();
     const [currentLocation, setCurrentLocation] = useCurrentLocation();
-    const [showLocation, toggleShowLocation] = useShowLocation();
-    const [addressData, setAddressData] = useAddress();
+   /* const [addressData, setAddressData] = useAddress();*/
 
     const asyncToggleLocationAndUpdateUI = async () => {
         try {
-            toggleShowLocation()
+            let showLocation = !userModel.showLocation;
+            setUserModel({
+                ...userModel,
+                showLocation
+            })
+            console.log("Test of toggle show location changes:", userModel)
         } catch (error) {
             console.log(error)
         }
@@ -34,10 +37,10 @@ const Profile = () => {
                 },
                 mode: 'cors', // no-cors, *cors, same-origin
                 body: JSON.stringify({
-                    nickname: user.nickname,
-                    picture: user.picture,
-                    location: addressData,
-                    showLocation: showLocation
+                    nickname: userModel.nickname,
+                    picture: userModel.picture,
+                    location: userModel.location,
+                    showLocation: userModel.showLocation
                 })
             });
             const responseData = await response.json();
@@ -70,11 +73,27 @@ const Profile = () => {
                 },
                 mode: 'cors', // no-cors, *cors, same-origin
                 body: JSON.stringify({
-                    nickname: user.nickname,
-                    picture: user.picture,
-                    location: addressData,
-                    showLocation: showLocation
+                    nickname: userModel.nickname,
+                    picture: userModel.picture,
+                    location: userModel.location,
+                    showLocation: userModel.showLocation
                 })
+            });
+            const responseData = await response.json();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const updateCode = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+            const response = await fetch(`http://localhost:3002/code`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                mode: 'cors', // no-cors, *cors, same-origin
             });
             const responseData = await response.json();
         } catch (error) {
@@ -96,60 +115,40 @@ const Profile = () => {
             console.log(error)
         }
     }
+  /*  const updateShowLocation = () => {
+        let prevUserModel = {
+            ...userModel,
+            showLocation
+        }
+        setUserModel(prevUserModel);
+    }*/
+    /*useEffect(() =>{
+        console.log("Profile change on show location");
+        updateShowLocation()
+    },[showLocation]);*/
 
+    //TODO Fix current location setup
   return (
     <div>
         <LocationMaster />
         <TimezoneFinder />
         <div>
-        <div>
-          <img
-            src={picture}
-            alt="Profile Picture"
-          />
-        </div>
-        <div>
-          <h2>{name}</h2>
-        </div>
+            <ProfilePicture />
       </div>
       <div>
-        <Typography variant={"body1"}>
-            {
-                "Nickname: " +user.nickname
-            }
-        </Typography>
-      <Typography variant={"body1"}>
-          {
-              "CurrentLocation: " + currentLocation
-          }
-      </Typography>
-      <Typography variant={"body1"}>
-          {
-              "City: " +addressData.city
-          }
-      </Typography>
-      <Typography variant={"body1"}>
-          {
-              "Country: " + addressData.country
-          }
-      </Typography>
-      <Typography variant={"body1"}>
-          {
-              "TimeZone: " + addressData.timezone
-          }
-      </Typography>
-      <Typography variant={"body1"}>
-          {
-              "ShowLocation: " + showLocation
-          }
-      </Typography>
+          <ProfileTextElement value={userModel.nickname} text={"Nickname: "}/>
+          <ProfileTextElement value={userModel.friendCode} text={"Current Friend Code:"}/>
+          <ProfileTextElement value={currentLocation} text={"Current Location"}/>
+          <ProfileTextElement value={userModel.location?.country  || ""} text={"Country"}/>
+          <ProfileTextElement value={userModel.location?.timezone || ""} text={"TimeZone:"}/>
+          <ProfileTextElement value={userModel.showLocation} text={"Allow Fetch Location: :"}/>
+
           <Button onClick={asyncToggleLocationAndUpdateUI}>{"Show Location:"}</Button>
           <Button onClick={getUser}>{"Get"}</Button>
           <Button onClick={postUser}>{"Post"}</Button>
           <Button onClick={updateUser}>{"Update"}</Button>
           <Button onClick={deleteUser}>{"Delete"}</Button>
-
-
+          <Button onClick={updateCode}>{"New Code"}</Button>
       </div>
     </div>
   );

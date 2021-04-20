@@ -3,9 +3,8 @@ import {useCurrentLocation} from "../../contexts/LocationContext";
 
 const LocationReset = () => {
 
-    const [currentLocation,setCurrentLocation] = useCurrentLocation();
     useEffect(() =>{
-
+        console.log("Location Reset");
     },[])
     return (
         <div>

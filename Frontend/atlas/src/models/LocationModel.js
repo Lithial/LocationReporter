@@ -1,6 +1,5 @@
-export class Location {
-    constructor(city, country,lat, lng, timezone) {
-        this.city = city;
+export class LocationModel {
+    constructor( country,lat, lng, timezone) {
         this.country = country;
         this.lat = lat;
         this.lng = lng;
