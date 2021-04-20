@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS users(
             currentFriendCode varchar
         );`
 
-
 const locationTable = `
         CREATE TABLE IF NOT EXISTS locations(
             userId varchar,
@@ -17,6 +16,7 @@ const locationTable = `
             timezone varchar, 
             FOREIGN KEY (userId) REFERENCES users(userId) on delete cascade on update cascade
         );`
+
  const friendTable = `
         CREATE TABLE IF NOT EXISTS friends(
             id serial primary key,
@@ -25,11 +25,14 @@ const locationTable = `
             FOREIGN KEY (userId) REFERENCES users(userID) on delete cascade on update cascade,
             FOREIGN KEY (friendId) REFERENCES users(userID) on delete cascade on update cascade    
         );`
+
  getUser = (id) => {
      return `
-        SELECT *
+        SELECT  *
         FROM users
-        WHERE userId = '${id}'`
+        INNER JOIN locations on users.userId = locations.userId
+        WHERE users.userId = '190452753850433536';
+        `
  }
 
  createUser = (id, req) => {
@@ -39,12 +42,14 @@ const locationTable = `
         ON CONFLICT DO NOTHING;
     `
  }
+
  createLocation = (id, req) => {
      return `
         INSERT INTO locations (userId, country, lat,lng,timezone)
         VALUES ('${id}','${req.body.location.country}','${req.body.location.lat}', '${req.body.location.lng}', '${req.body.location.timezone}')
         ON CONFLICT DO NOTHING;`
  }
+
  updateUser = (id, req) => {
     return `
         UPDATE users
@@ -54,6 +59,7 @@ const locationTable = `
             showLocation=${req.body.showLocation}
         WHERE userID = '${id}';`
 }
+
  updateLocation = (id, req) => {
     return `
         UPDATE locations
@@ -64,16 +70,26 @@ const locationTable = `
             timezone='${req.body.location.timezone}'
         WHERE userID = '${id}';`
 }
+
+updateFriendCode = (id, friendCode) => {
+    return `
+        UPDATE users
+        SET currentFriendCode='${friendCode}'
+        WHERE userID = '${id}';`
+}
+
 deleteUser = (id) => {
     return `
         DELETE FROM users
         WHERE userID = '${id}';`
 }
+
 deleteLocation = (id) => {
     return `
         DELETE FROM locations
         WHERE userID = '${id}';`
 }
+
  module.exports = {
      getUser:getUser,
      createUser:createUser,
@@ -82,6 +98,7 @@ deleteLocation = (id) => {
      updateLocation:updateLocation,
      deleteUser:deleteUser,
      deleteLocation:deleteLocation,
+     updateFriendCode:updateFriendCode,
      userTable,
      locationTable,
      friendTable,

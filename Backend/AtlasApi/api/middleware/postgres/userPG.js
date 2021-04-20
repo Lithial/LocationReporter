@@ -1,24 +1,24 @@
 const queryLibrary = require('./queryLibrary');
+const {
+    v4: uuidv4,
+} = require('uuid');
 
-getUser = (pool,id) =>{
+getUser = (pool, id, callback) => {
 
-    pool.connect((err,client,done) => {
-    if(err) throw err;
+    pool.connect((err, client, done) => {
+        if (err) throw err;
 
-    client.query(queryLibrary.getUser(id.toString()),
-        (err,res) => {
-            if(err) {
-                console.log(err.stack);
-            }else{
-                console.log("User fetched successfully");
-            }
-            done();
-        });
+        client.query(queryLibrary.getUser(id.toString()))
+            .then(response => {
+                callback(response.rows[0]);
+            })
+            .catch(e => console.error(e.stack));
     })
 }
-createUser = (pool,id,req) => {
 
-    pool.connect((err,client,done) => {
+createUser = (pool, id, req) => {
+
+    pool.connect((err, client, done) => {
         if (err) throw err;
 
         client.query(queryLibrary.createUser(id, req), (err, res) => {
@@ -39,9 +39,9 @@ createUser = (pool,id,req) => {
         done();
     })
 }
-updateUser = (pool,id,req) => {
+updateUser = (pool, id, req) => {
 
-    pool.connect((err,client,done) => {
+    pool.connect((err, client, done) => {
         if (err) throw err;
 
         client.query(queryLibrary.updateUser(id, req), (err, res) => {
@@ -63,9 +63,9 @@ updateUser = (pool,id,req) => {
     })
 }
 
-deleteUser = (pool,id) => {
+deleteUser = (pool, id) => {
 
-    pool.connect((err,client,done) => {
+    pool.connect((err, client, done) => {
         if (err) throw err;
 
         client.query(queryLibrary.deleteLocation(id), (err, res) => {
@@ -88,6 +88,24 @@ deleteUser = (pool,id) => {
     })
 }
 
+updateFriendCode = (pool, id) => {
+    const currentFriendCode = uuidv4();
+    console.log("currentFriendCode:", currentFriendCode)
+    pool.connect((err, client, done) => {
+        if (err) throw err;
+
+        client.query(queryLibrary.updateFriendCode(id, currentFriendCode), (err, res) => {
+            if (err) {
+                console.log(err.stack);
+            } else {
+                console.log("Friend Code updated successfully to ", currentFriendCode);
+            }
+        });
+
+        done();
+    })
+    return currentFriendCode;
+}
 
 
 module.exports = {
@@ -95,4 +113,5 @@ module.exports = {
     createUser: createUser,
     updateUser: updateUser,
     deleteUser: deleteUser,
+    updateFriendCode: updateFriendCode,
 }
