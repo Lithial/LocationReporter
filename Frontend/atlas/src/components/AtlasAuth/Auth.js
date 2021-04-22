@@ -1,6 +1,6 @@
 import {useAuth0} from "@auth0/auth0-react";
 import {useUser} from "../../contexts/UserContext";
-import GetUser from "../../api/UserCalls";
+import {GetUser, GetFriends} from "../../api/UserCalls";
 import {useMemo} from "react";
 
 function Auth(){
@@ -18,9 +18,18 @@ function Auth(){
         setCurrentCoords,
         setTimezone,
         setUserLoaded,
-        setRecentChange
+        setRecentChange,
+        setFriends,
 } = useUser();
 
+    const GetFriendsFunction = () => {
+        console.log("Getting friends list");
+        GetFriends(getAccessTokenSilently, (data => {
+            if(data != null){
+                console.log("Friend Data:", data);
+            }
+        }))
+    }
 
     const GetUserFunction = () => {
         console.log("Getting user info!");
@@ -54,7 +63,8 @@ function Auth(){
     };
 
     useMemo(()=>{
-        GetUserFunction()
+        GetUserFunction();
+        GetFriendsFunction();
     },[])
 
     return (

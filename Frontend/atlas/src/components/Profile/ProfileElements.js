@@ -3,6 +3,7 @@ import ProfilePicture from "./ProfilePicture";
 import ProfileTextElement from "./ProfileTextElement";
 import {useUser} from "../../contexts/UserContext";
 import LocationMaster from "../LocationFinder/LocationMaster";
+import ProfileFriendInput from "./ProfileFriendInput";
 
 const ProfileElements = () => {
     const {
@@ -30,6 +31,7 @@ const ProfileElements = () => {
             <ProfileTextElement value={country  || ""} text={"Country"}/>
             <ProfileTextElement value={timezone || ""} text={"TimeZone:"}/>
             <ProfileTextElement value={showLocation} text={"Allow Fetch Location: :"}/>
+            <ProfileFriendInput/>
         </div>
     );
 };

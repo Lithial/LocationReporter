@@ -3,12 +3,12 @@ const {
     v4: uuidv4,
 } = require('uuid');
 
-getUser = (pool, id, callback) => {
+getUserWithLocation = (pool, id, callback) => {
 
     pool.connect((err, client, done) => {
         if (err) throw err;
 
-        client.query(queryLibrary.getUser(id.toString()))
+        client.query(queryLibrary.getUserWithLocation(id.toString()))
             .then(response => {
                 callback(response.rows[0]);
             })
@@ -109,6 +109,7 @@ updateFriendCode = (pool, id) => {
 
 
 module.exports = {
+    getUserWithLocation:getUserWithLocation,
     getUser: getUser,
     createUser: createUser,
     updateUser: updateUser,
