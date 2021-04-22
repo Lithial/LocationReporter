@@ -1,37 +1,60 @@
 const queryLibrary = require('./queryLibrary');
 
-getFriend = (pool,id) =>{
+getFriend = (pool,req, callback) =>{
 
     pool.connect((err,client,done) => {
         if(err) throw err;
 
-        client.query(queryLibrary.getFriend(id.toString()),
+        client.query(queryLibrary.getPotentialFriend(req.body.friendCode.toString()),
             (err,res) => {
                 if(err) {
                     console.log(err.stack);
                 }else{
                     console.log("Friend fetched successfully");
+                    callback(res.rows[0]);
                 }
                 done();
             });
     })
 }
-createFriend = (pool,id,req) => {
+
+getFriends = (pool,id, callback) =>{
+
+    pool.connect((err,client,done) => {
+        if(err) throw err;
+
+        client.query(queryLibrary.getFriends(id),
+            (err,res) => {
+                if(err) {
+                    console.log(err.stack);
+                }else{
+                    console.log("Friend fetched successfully");
+                    console.log(res);
+                    callback(res);
+                }
+                done();
+            });
+    })
+}
+
+createFriend = (pool,id,friendId, callback) => {
 
     pool.connect((err,client,done) => {
         if (err) throw err;
 
-        client.query(queryLibrary.createFriend(id, req), (err, res) => {
+        client.query(queryLibrary.createFriend(id, friendId), (err, res) => {
             if (err) {
                 console.log(err.stack);
             } else {
                 console.log("Friend created successfully");
+                callback(res);
             }
         });
 
         done();
     })
 }
+
 updateFriend = (pool,id,req) => {
 
     pool.connect((err,client,done) => {
@@ -70,6 +93,7 @@ deleteFriend = (pool,id) => {
 
 module.exports = {
     getFriend: getFriend,
+    getFriends: getFriends,
     createFriend: createFriend,
     updateFriend: updateFriend,
     deleteFriend: deleteFriend,

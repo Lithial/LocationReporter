@@ -13,7 +13,7 @@ module.exports = (app) => {
         let id = userId(req);
         console.log('GET |',id);
 
-        userPG.getUser(pool, id, function (response) {
+        userPG.getUserWithLocation(pool, id, function (response) {
             return res.send(response);
         })
     });

@@ -1,3 +1,4 @@
+
 const userTable = `
 CREATE TABLE IF NOT EXISTS users(
             userId varchar PRIMARY KEY,
@@ -22,18 +23,43 @@ const locationTable = `
             id serial primary key,
             userId varchar,
             friendId varchar,
-            FOREIGN KEY (userId) REFERENCES users(userID) on delete cascade on update cascade,
-            FOREIGN KEY (friendId) REFERENCES users(userID) on delete cascade on update cascade    
+            CONSTRAINT sender FOREIGN KEY (userId) REFERENCES users(userID) on delete cascade on update cascade,
+            CONSTRAINT reciever FOREIGN KEY (friendId) REFERENCES users(userID) on delete cascade on update cascade    
         );`
 
- getUser = (id) => {
+ getUserWithLocation = (id) => {
      return `
         SELECT  *
         FROM users
         INNER JOIN locations on users.userId = locations.userId
-        WHERE users.userId = '190452753850433536';
+        WHERE users.userId = '${id}';
         `
  }
+getUser = (id) => {
+    return `
+        SELECT  *
+        FROM users
+        WHERE users.userId = '${id}';
+        `
+}
+
+getPotentialFriend = (friendCode) => {
+    return `
+        SELECT  *
+        FROM users
+        WHERE currentFriendCode = '${friendCode}';
+        `
+}
+
+getFriends = (id) => {
+    return `
+     SELECT  *
+        FROM users
+        INNER JOIN locations on users.userId = locations.userId
+        INNER JOIN friends on users.userId = friends.userId
+		WHERE friendid = ${id}; 
+    ` //user id
+}
 
  createUser = (id, req) => {
     return `
@@ -49,6 +75,21 @@ const locationTable = `
         VALUES ('${id}','${req.body.location.country}','${req.body.location.lat}', '${req.body.location.lng}', '${req.body.location.timezone}')
         ON CONFLICT DO NOTHING;`
  }
+
+getUser = (id) => {
+    return `
+        SELECT  *
+        FROM users
+        WHERE users.userId = ${id};
+        `
+}
+
+createFriend = (id, friendId) => {
+    return `
+        INSERT INTO friends (userId, friendId)
+        VALUES ('${id}','${friendId}')
+        ON CONFLICT DO NOTHING;`
+}
 
  updateUser = (id, req) => {
     return `
@@ -92,13 +133,18 @@ deleteLocation = (id) => {
 
  module.exports = {
      getUser:getUser,
+     getUserWithLocation:getUserWithLocation,
+     getPotentialFriend:getPotentialFriend,
+     getFriends:getFriends,
      createUser:createUser,
      createLocation:createLocation,
+     createFriend: createFriend,
      updateUser:updateUser,
      updateLocation:updateLocation,
      deleteUser:deleteUser,
      deleteLocation:deleteLocation,
      updateFriendCode:updateFriendCode,
+
      userTable,
      locationTable,
      friendTable,

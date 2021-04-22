@@ -1,5 +1,6 @@
 const queryLibrary = require('../api/middleware/postgres/queryLibrary')
 const userRoutes = require('../api/routes/userRoutes');
+const friendsRoutes = require('../api/routes/friendsRoutes');
 const { Pool } = require('pg');
 const getConnection = require('./connection');
 
@@ -7,7 +8,8 @@ function createDatabase(app) {
 
     const pool = getConnection();
 
-    userRoutes(app);
+/*    userRoutes(app);
+    friendsRoutes(app);*/
 
     pool.connect((err,client,done) => {
         if (err) throw err;
