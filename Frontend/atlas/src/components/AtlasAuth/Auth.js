@@ -1,7 +1,8 @@
 import {useAuth0} from "@auth0/auth0-react";
 import {useUser} from "../../contexts/UserContext";
-import {GetUser, GetFriends} from "../../api/UserCalls";
+import {GetUser, GetFriends, CreateUser} from "../../api/UserCalls";
 import {useMemo} from "react";
+import {DEV_MODE} from "../../config/Config";
 
 function Auth(){
     const { user } = useAuth0();
@@ -23,36 +24,66 @@ function Auth(){
 } = useUser();
 
     const GetFriendsFunction = () => {
-        console.log("Getting friends list");
+        if(DEV_MODE){
+            console.log("Getting friends list");
+        }
         GetFriends(getAccessTokenSilently, (data => {
             if(data != null){
-                console.log("Friend Data:", data);
+                if(DEV_MODE){
+                    console.log("Friend Data:", data);
+                }
+                setFriends(data);
             }
         }))
     }
 
     const GetUserFunction = () => {
-        console.log("Getting user info!");
+        if(DEV_MODE){
+            console.log("Getting user info!");
+        }
         GetUser(getAccessTokenSilently,(data =>
             {
-                if(data!==null && isAuthenticated && !userLoaded){
-                    console.log("data:", data)
+                if(DEV_MODE){
+                    console.log(data);
+                }
+                if(data.status !== "404" && data!==null && isAuthenticated && !userLoaded){
+                    if(DEV_MODE) {
+                        console.log("data:", data)
+                        console.log("Auth User Show Location:", data.showlocation)
+                    }
+                    setShowLocation(JSON.parse(data.showlocation));
                     setNickname(user.name);
                     setPicture(user.picture);
-                    console.log("Auth User Show Location:", data.showlocation)
-                    setShowLocation(JSON.parse(data.showlocation));
                     setFriendCode(data.currentfriendcode);
-                    setCountry(data.country);
-                    setLat(data.lat);
-                    setLng(data.lng);
-                    setTimezone(data.timezone);
-                    setCurrentCoords([data.lat,data.lng]);
+                    if(!data.country){
+                        setCountry("")
+                        setLat(0);
+                        setLng(0);
+                        setTimezone("");
+                        setCurrentCoords([0,0]);
+                    }else{
+                        setCountry(data.country);
+                        setLat(data.lat);
+                        setLng(data.lng);
+                        setTimezone(data.timezone);
+                        setCurrentCoords([data.lat,data.lng]);
+                    }
                     setUserLoaded(true);
                 }
-                else if(isAuthenticated){
+                else if(isAuthenticated && data.status === "404"){
                     setNickname(user.name);
                     setPicture(user.picture);
-                    setShowLocation(user.showLocation);
+                    setShowLocation(JSON.parse('false'));
+                    setCountry("")
+                    setLat(0);
+                    setLng(0);
+                    setCurrentCoords([0,0]);
+                    setTimezone("")
+                    CreateUserFunction({
+                        nickname: user.nickname,
+                        picture: user.picture,
+                        showLocation: false,
+                    });
                 }
                 else{
                     console.log("No authentication to create user from");
@@ -61,9 +92,23 @@ function Auth(){
             }
         ));
     };
+    const CreateUserFunction = (userData) => {
+        if(DEV_MODE) {
+            console.log("Creating User");
+            console.log("User data:", userData);
+        }
+        CreateUser(getAccessTokenSilently,userData, (data => {
+            if(data != null){
+                setFriendCode(data.currentFriendCode);
+                setUserLoaded(true);
+            }
+        }))
+    }
 
     useMemo(()=>{
-        GetUserFunction();
+        if(isAuthenticated){
+            GetUserFunction();
+        }
         GetFriendsFunction();
     },[])
 

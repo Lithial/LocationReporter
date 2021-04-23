@@ -22,8 +22,6 @@ const ProfileElements = () => {
 
     return (
         <div>
-            <LocationMaster />
-
             <ProfilePicture/>
             <ProfileTextElement value={nickname} text={"Nickname: "}/>
             <ProfileTextElement value={friendCode} text={"Current Friend Code:"}/>

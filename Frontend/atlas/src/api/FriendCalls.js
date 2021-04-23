@@ -1,11 +1,13 @@
 
-import {API_BASE_URL, API_FRIENDS_ENDPOINT} from "../config/Config";
+import {API_BASE_URL, API_FRIENDS_ENDPOINT, DEV_MODE} from "../config/Config";
 
 async function PostFriendRequest (getAccessTokenSilently,friendCode, callback) {
     try {
-        console.log("Retrieving user Data");
+        if(DEV_MODE) {
+            console.log("Retrieving user Data");
+            console.log("ApiEndpoint",`${API_BASE_URL}/${API_FRIENDS_ENDPOINT}`)
+        }
         const token = await getAccessTokenSilently();
-        console.log("ApiEndpoint",`${API_BASE_URL}/${API_FRIENDS_ENDPOINT}`)
         const response = fetch(`${API_BASE_URL}/${API_FRIENDS_ENDPOINT}`,
             {
                 method: "POST",

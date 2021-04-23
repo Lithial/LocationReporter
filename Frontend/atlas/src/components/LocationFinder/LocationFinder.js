@@ -1,6 +1,7 @@
 import React, {useEffect, useMemo, useRef} from 'react';
 import {useErrors} from "../../contexts/ErrorContext";
 import {useUser} from "../../contexts/UserContext";
+import {DEV_MODE} from "../../config/Config";
 
 const LocationFinder = () => {
 
@@ -40,8 +41,9 @@ const GetLocationCoords = () => {
                                     setCountry(data.country)
                                     setTimezone(data.timezone)
                                     setCurrentCoords([lat, lng])
-                                    setRecentChange(Date.now)
-                                    console.log("userModel Test From Location Finder:", lat, lng)
+                                    if(DEV_MODE) {
+                                        console.log("userModel Test From Location Finder:", lat, lng)
+                                    }
                                 } else {
                                     setErrorMessage(data.error.message)
                                 }
@@ -53,11 +55,11 @@ const GetLocationCoords = () => {
         }
     }
 }
-useMemo(()=>{
-    console.log("Location Finder");
-    if(updateLocation){
-        GetLocationCoords()
+useEffect(()=>{
+    if(DEV_MODE) {
+        console.log("Location Finder");
     }
+    GetLocationCoords()
 },[])
 
     return (

@@ -9,6 +9,7 @@ import {useUser} from "../../contexts/UserContext";
 /*These imports need to be in this order for the map to load properly*/
 
 const MapRenderer = () => {
+    const {showLocation} = useUser();
     const [zoom,setZoom] = useState(3);
     const [centrePosition,setCentrePosition] = useState([5, 176])
     const {currentCoords} = useUser();
@@ -29,7 +30,7 @@ const MapRenderer = () => {
                     subdomains={["mt0", "mt1", "mt2", "mt3"]}
                     attribution="&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors"
                     url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"/>
-                <Marker
+                {showLocation ? <Marker
                     position={currentCoords}
                     icon={icon}>
                     <Popup>
@@ -37,7 +38,7 @@ const MapRenderer = () => {
                         <br/>
                         Easily customizable.
                     </Popup>
-                </Marker>
+                </Marker> : <></>}
             </MapContainer>
         </div>
     );

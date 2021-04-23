@@ -4,6 +4,7 @@ import Button from "@material-ui/core/Button";
 import TimezoneFinder from "../components/TimezoneFinder";
 import {useUser} from "../contexts/UserContext";
 import ProfileElements from "../components/Profile/ProfileElements";
+import LocationMaster from "../components/LocationFinder/LocationMaster";
 
 const Profile = () => {
     const {getAccessTokenSilently} = useAuth0();
@@ -28,8 +29,6 @@ const Profile = () => {
             setShowLocation(reverseLocation)
             setUpdateLocation(reverseLocation);
             setRecentChange(Date.now())
-            console.log("Test of toggle show location changes:", reverseLocation)
-            console.log("Test of update location:", updateLocation)
         } catch (error) {
             console.log(error)
         }
@@ -139,7 +138,6 @@ const Profile = () => {
     <div>
       <div>
           <TimezoneFinder />
-
           <ProfileElements/>
 
           <Button onClick={asyncToggleLocationAndUpdateUI}>{"Show Location:"}</Button>

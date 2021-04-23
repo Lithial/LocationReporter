@@ -9,7 +9,6 @@ const ProfileFriendInput = () => {
     const [codeValue, setCodeValue] = useState("");
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(`submitting ${codeValue}`);
         PostFriendRequest(getAccessTokenSilently,codeValue,function (data) {
             console.log(data)
         })
