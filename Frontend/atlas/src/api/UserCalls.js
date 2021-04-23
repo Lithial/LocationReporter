@@ -1,12 +1,56 @@
 import {API_BASE_URL, API_FRIENDS_ENDPOINT, API_USERS_ENDPOINT, API_LOCATION_ENDPOINT, DEV_MODE} from "../config/Config";
 
+//todo there are endpoints in here that need to be configurated
+export async function UpdateFriendCode(getAccessTokenSilently,callback){
+    try {
+        const token = await getAccessTokenSilently();
+        const response = await fetch(`${API_BASE_URL}/code`, {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            mode: 'cors', // no-cors, *cors, same-origin
+        })
+            .then(res => res.json())
+            .then(data => {
+                callback(data);
+            })
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+export async function DeleteUser(getAccessTokenSilently, callback){
+    try {
+        if(DEV_MODE){
+            console.log("Deleting User")
+        }
+        const token = await getAccessTokenSilently();
+        const response = await fetch(`${API_BASE_URL}/${API_USERS_ENDPOINT}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+            mode: 'cors', // no-cors, *cors, same-origin
+        })
+            .then(res => res.json())
+            .then(data =>{
+
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }catch(error){
+
+    }
+}
 export async function UpdateLocation(getAccessTokenSilently, locationData, callback){
     try{
         const token = await getAccessTokenSilently();
         if(DEV_MODE){
             console.log("Location Data:", locationData)
         }
-        console.log("locationData:", locationData)
         const response = await fetch(`${API_BASE_URL}/${API_LOCATION_ENDPOINT}`,{
             method:"PUT",
             headers: {
@@ -143,3 +187,102 @@ export async function GetFriends(getAccessTokenSilently, callback) {
     }
 }
 
+/*const postUser = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+            const response = await fetch(`http://localhost:3002/user`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                mode: 'cors', // no-cors, *cors, same-origin
+                body: JSON.stringify({
+                    nickname: nickname,
+                    picture: picture,
+                    location: {
+                        country: country,
+                        lat: lat,
+                        lng:lng,
+                        timezone:timezone
+                    },
+                    showLocation: showLocation
+                })
+            });
+            const responseData = await response.json();
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+    const getUser = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+            const response = await fetch(`http://localhost:3002/user`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const responseData = await response.json();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const updateUser = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+            const response = await fetch(`http://localhost:3002/user`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                mode: 'cors', // no-cors, *cors, same-origin
+                body: JSON.stringify({
+                    nickname: nickname,
+                    picture: picture,
+                    location: {
+                        country: country,
+                        lat: lat,
+                        lng:lng,
+                        timezone:timezone
+                    },
+                    showLocation: showLocation
+                })
+            });
+            const responseData = await response.json();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const updateCode = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+            const response = await fetch(`http://localhost:3002/code`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                mode: 'cors', // no-cors, *cors, same-origin
+            });
+            const responseData = await response.json();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const deleteUser = async () => {
+        try {
+            const token = await getAccessTokenSilently();
+            const response = await fetch(`http://localhost:3002/user`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+                mode: 'cors', // no-cors, *cors, same-origin
+            });
+            const responseData = await response.json();
+        } catch (error) {
+            console.log(error)
+        }
+    }*/

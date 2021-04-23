@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS users(
             userId varchar PRIMARY KEY NOT NULL,
             nickname varchar NOT NULL,
             picture varchar NOT NULL,
-            showLocation boolean NOT NULL,
             currentFriendCode varchar
         );`
 
@@ -15,6 +14,7 @@ const locationTable = `
             lat varchar,
             lng varchar,
             timezone varchar, 
+            showLocation boolean NOT NULL,
             FOREIGN KEY (userId) REFERENCES users(userId) on delete cascade on update cascade
         );`
 
@@ -64,16 +64,16 @@ getFriends = (id) => {
 
  createUser = (id, req, currentFriendCode) => {
     return `
-        INSERT INTO users (userId, nickname, picture, showLocation, currentFriendCode)
-        VALUES ('${id}','${req.body.nickname}','${req.body.picture}','${req.body.showLocation}', '${currentFriendCode}')
+        INSERT INTO users (userId, nickname, picture, currentFriendCode)
+        VALUES ('${id}','${req.body.nickname}','${req.body.picture}', '${currentFriendCode}')
         ON CONFLICT DO NOTHING;
     `
  }
 
  createLocation = (id, req) => {
      return `
-        INSERT INTO locations (userId)
-        VALUES ('${id}')
+        INSERT INTO locations (userId, showLocation)
+        VALUES ('${id}','false')
         ON CONFLICT DO NOTHING;`
  }
 
@@ -97,8 +97,7 @@ createFriend = (id, friendId) => {
         UPDATE users
         SET userID='${id}',
             nickname='${req.body.nickname}',
-            picture='${req.body.picture}',
-            showLocation=${req.body.showLocation}
+            picture='${req.body.picture}'
         WHERE userID = '${id}';`
 }
 
@@ -106,13 +105,20 @@ createFriend = (id, friendId) => {
     return `
         UPDATE locations
         SET userID='${id}',
-            country='${req.body.location.country}',
-            lat='${req.body.location.lat}', 
-            lng='${req.body.location.lng}', 
-            timezone='${req.body.location.timezone}'
+            country='${req.body.country}',
+            lat='${req.body.lat}', 
+            lng='${req.body.lng}', 
+            timezone='${req.body.timezone}',
+            showLocation='${req.body.showLocation}'
         WHERE userID = '${id}';`
 }
-
+updateShowLocation = (id, req) => {
+    return `
+        UPDATE locations
+        SET userID='${id}',
+            showLocation='${req.body.showLocation}'
+        WHERE userID = '${id}';`
+}
 updateFriendCode = (id, friendCode) => {
     return `
         UPDATE users
@@ -145,7 +151,7 @@ deleteLocation = (id) => {
      deleteUser:deleteUser,
      deleteLocation:deleteLocation,
      updateFriendCode:updateFriendCode,
-
+     updateShowLocation:updateShowLocation,
      userTable,
      locationTable,
      friendTable,
