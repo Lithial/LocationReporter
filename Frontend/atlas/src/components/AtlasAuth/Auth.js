@@ -81,9 +81,7 @@ function Auth(){
                     setTimezone("")
                     CreateUserFunction({
                         nickname: user.nickname,
-                        picture: user.picture,
-                        showLocation: false,
-                    });
+                        picture: user.picture});
                 }
                 else{
                     console.log("No authentication to create user from");

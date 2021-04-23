@@ -3,6 +3,7 @@ const cors = require('cors');
 const testRoutes = require('../api/routes/testRoutes');
 const userRoutes = require('../api/routes/userRoutes');
 const friendsRoutes = require('../api/routes/friendsRoutes');
+const locationRoutes = require('../api/routes/locationRoutes');
 
 module.exports = async function expressSettings ( app,config ) {
     // Useful if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
@@ -22,6 +23,7 @@ module.exports = async function expressSettings ( app,config ) {
     testRoutes(app);
     userRoutes(app);
     friendsRoutes(app);
+    locationRoutes(app);
     /// catch 404 and forward to error handler
     app.use((req, res, next) => {
         const err = new Error('Not Found');

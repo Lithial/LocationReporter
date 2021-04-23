@@ -5,6 +5,7 @@ import TimezoneFinder from "../components/TimezoneFinder";
 import {useUser} from "../contexts/UserContext";
 import ProfileElements from "../components/Profile/ProfileElements";
 import LocationMaster from "../components/LocationFinder/LocationMaster";
+import {UpdateShowLocation} from "../api/UserCalls";
 
 const Profile = () => {
     const {getAccessTokenSilently} = useAuth0();
@@ -29,6 +30,10 @@ const Profile = () => {
             setShowLocation(reverseLocation)
             setUpdateLocation(reverseLocation);
             setRecentChange(Date.now())
+            UpdateShowLocation(getAccessTokenSilently,false,function(){
+
+            });
+
         } catch (error) {
             console.log(error)
         }

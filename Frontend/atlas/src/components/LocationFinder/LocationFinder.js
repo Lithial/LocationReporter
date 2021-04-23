@@ -2,11 +2,14 @@ import React, {useEffect, useMemo, useRef} from 'react';
 import {useErrors} from "../../contexts/ErrorContext";
 import {useUser} from "../../contexts/UserContext";
 import {DEV_MODE} from "../../config/Config";
+import {UpdateLocation,UpdateShowLocation} from "../../api/UserCalls";
+import {useAuth0} from "@auth0/auth0-react";
 
 const LocationFinder = () => {
 
     const {setCountry, setLat, setLng, setCurrentCoords, setTimezone, setRecentChange, updateLocation, setUpdateLocation} = useUser();
     const [errorMessage, setErrorMessage] = useErrors();
+    const { getAccessTokenSilently } = useAuth0();
 
 const GetLocationCoords = () => {
     if(updateLocation) {
@@ -41,6 +44,15 @@ const GetLocationCoords = () => {
                                     setCountry(data.country)
                                     setTimezone(data.timezone)
                                     setCurrentCoords([lat, lng])
+                                    UpdateLocation( getAccessTokenSilently,{
+                                        country: data.country,
+                                        lat: lat,
+                                        lng:lng,
+                                        timezone:data.timezone,
+                                        showLocation: true
+                                    },function(){
+
+                                    })
                                     if(DEV_MODE) {
                                         console.log("userModel Test From Location Finder:", lat, lng)
                                     }
