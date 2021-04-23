@@ -23,14 +23,14 @@ getFriends = (pool,id, callback) =>{
     pool.connect((err,client,done) => {
         if(err) throw err;
 
-        client.query(queryLibrary.getFriends(id),
+        client.query(queryLibrary.getFriends(id.toString()),
             (err,res) => {
                 if(err) {
                     console.log(err.stack);
                 }else{
                     console.log("Friend fetched successfully");
-                    console.log(res);
-                    callback(res);
+                    console.log(res.rows);
+                    callback(res.rows);
                 }
                 done();
             });

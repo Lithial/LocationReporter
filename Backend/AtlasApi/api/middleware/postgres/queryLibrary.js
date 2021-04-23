@@ -1,16 +1,16 @@
 
 const userTable = `
 CREATE TABLE IF NOT EXISTS users(
-            userId varchar PRIMARY KEY,
-            nickname varchar,
-            picture varchar,
-            showLocation boolean,
+            userId varchar PRIMARY KEY NOT NULL,
+            nickname varchar NOT NULL,
+            picture varchar NOT NULL,
+            showLocation boolean NOT NULL,
             currentFriendCode varchar
         );`
 
 const locationTable = `
         CREATE TABLE IF NOT EXISTS locations(
-            userId varchar,
+            userId varchar primary key NOT NULL,
             country varchar,
             lat varchar,
             lng varchar,
@@ -21,8 +21,8 @@ const locationTable = `
  const friendTable = `
         CREATE TABLE IF NOT EXISTS friends(
             id serial primary key,
-            userId varchar,
-            friendId varchar,
+            userId varchar NOT NULL,
+            friendId varchar NOT NULL,
             CONSTRAINT sender FOREIGN KEY (userId) REFERENCES users(userID) on delete cascade on update cascade,
             CONSTRAINT reciever FOREIGN KEY (friendId) REFERENCES users(userID) on delete cascade on update cascade    
         );`
@@ -35,6 +35,7 @@ const locationTable = `
         WHERE users.userId = '${id}';
         `
  }
+
 getUser = (id) => {
     return `
         SELECT  *
@@ -53,26 +54,26 @@ getPotentialFriend = (friendCode) => {
 
 getFriends = (id) => {
     return `
-     SELECT  *
+     SELECT nickname, picture, country, lat, lng, timezone
         FROM users
         INNER JOIN locations on users.userId = locations.userId
         INNER JOIN friends on users.userId = friends.userId
-		WHERE friendid = ${id}; 
+		WHERE friendid = '${id}'; 
     ` //user id
 }
 
- createUser = (id, req) => {
+ createUser = (id, req, currentFriendCode) => {
     return `
-        INSERT INTO users (userId, nickname, picture, showLocation)
-        VALUES ('${id}','${req.body.nickname}','${req.body.picture}',${req.body.showLocation})
+        INSERT INTO users (userId, nickname, picture, showLocation, currentFriendCode)
+        VALUES ('${id}','${req.body.nickname}','${req.body.picture}','${req.body.showLocation}', '${currentFriendCode}')
         ON CONFLICT DO NOTHING;
     `
  }
 
  createLocation = (id, req) => {
      return `
-        INSERT INTO locations (userId, country, lat,lng,timezone)
-        VALUES ('${id}','${req.body.location.country}','${req.body.location.lat}', '${req.body.location.lng}', '${req.body.location.timezone}')
+        INSERT INTO locations (userId)
+        VALUES ('${id}')
         ON CONFLICT DO NOTHING;`
  }
 

@@ -8,9 +8,6 @@ function createDatabase(app) {
 
     const pool = getConnection();
 
-/*    userRoutes(app);
-    friendsRoutes(app);*/
-
     pool.connect((err,client,done) => {
         if (err) throw err;
         client.query(queryLibrary.userTable, (err, res) => {

@@ -15,6 +15,7 @@ module.exports = (app) => {
 
         userPG.getUserWithLocation(pool, id, function (response) {
             return res.send(response);
+
         })
     });
 
@@ -24,9 +25,16 @@ module.exports = (app) => {
 
         let id = userId(req);
         console.log('POST |',id)
+        let user = userPG.createUser(pool, id, req, function(user){
+            if(user.nickname != null){
+                return res.send(user).status(200);
+            }
+            else{
+                return res.send({msg: "User not created", status: "404"})
+            }
+        });
 
-        let user = userPG.createUser(pool, id, req);
-        return res.send(req.body).status(200);
+
     })
 
     app.put('/user', isAuth, (req, res) => {
@@ -39,6 +47,18 @@ module.exports = (app) => {
         let user = userPG.updateUser(pool, id, req);
         return res.send(req.body).status(200);
     })
+
+    app.delete('/user', isAuth, (req, res) => {
+
+        const pool = getConnection();
+
+        let id = userId(req);
+        console.log('DELETE |',id)
+
+        let user = userPG.deleteUser(pool, id);
+        return res.send(req.body).status(200);
+    })
+
     app.put('/code', isAuth, (req, res) => {
 
         const pool = getConnection();
@@ -51,15 +71,5 @@ module.exports = (app) => {
         return res.send({
             friendCode: code,
         }).status(200);
-    })
-    app.delete('/user', isAuth, (req, res) => {
-
-        const pool = getConnection();
-
-        let id = userId(req);
-        console.log('DELETE |',id)
-
-        let user = userPG.deleteUser(pool, id);
-        return res.send(req.body).status(200);
     })
 };
