@@ -25,6 +25,7 @@ export async function DeleteUser(getAccessTokenSilently, callback){
     try {
         if(DEV_MODE){
             console.log("Deleting User")
+            console.log(`${API_BASE_URL}/${API_USERS_ENDPOINT}`)
         }
         const token = await getAccessTokenSilently();
         const response = await fetch(`${API_BASE_URL}/${API_USERS_ENDPOINT}`, {
@@ -36,13 +37,44 @@ export async function DeleteUser(getAccessTokenSilently, callback){
         })
             .then(res => res.json())
             .then(data =>{
-
+                callback(data);
             })
             .catch((error) => {
                 console.error(error);
             });
     }catch(error){
 
+    }
+}
+export async function DeleteFriend(getAccessTokenSilently,friendId, callback){
+    try {
+        if(DEV_MODE){
+            console.log("Deleting User")
+            console.log(`${API_BASE_URL}/${API_FRIENDS_ENDPOINT}`)
+            console.log("Deleting this Id from Friends List: ", friendId)
+        }
+        const token = await getAccessTokenSilently();
+        const response = await fetch(`${API_BASE_URL}/${API_FRIENDS_ENDPOINT}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                friendId:friendId
+            }),
+            mode: 'cors', // no-cors, *cors, same-origin
+        })
+            .then(res => res.json())
+            .then(data =>{
+                console.log("Delete Response:", data);
+                callback(data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }catch(error){
+        console.log(error);
     }
 }
 export async function UpdateLocation(getAccessTokenSilently, locationData, callback){

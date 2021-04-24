@@ -17,7 +17,8 @@ export const UserProvider = ({children}) => {
     const [userLoaded, setUserLoaded] = useState(false);
     const [recentChange, setRecentChange] = useState(true);
     const [updateLocation, setUpdateLocation] = useState(false);
-    const [friends, setFriends] = useState({});
+    const [friends, setFriends] = useState([]);
+    const [friendsLoaded, setFriendsLoaded] = useState(false);
 
     const UserModel = React.useMemo(() => ({
             nickname, setNickname,
@@ -33,7 +34,8 @@ export const UserProvider = ({children}) => {
             recentChange,setRecentChange,
             updateLocation, setUpdateLocation,
             friends,setFriends,
-    }),[nickname,picture,showLocation,friendCode,country,lat,lng,currentCoords,timezone,userLoaded,recentChange,updateLocation, friends])
+            friendsLoaded, setFriendsLoaded,
+    }),[nickname,picture,showLocation,friendCode,country,lat,lng,currentCoords,timezone,userLoaded,recentChange,updateLocation, friends, friendsLoaded])
 
     return (
         <UserContext.Provider value={UserModel}>

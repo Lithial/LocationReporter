@@ -21,6 +21,7 @@ function Auth(){
         setUserLoaded,
         setRecentChange,
         setFriends,
+        setFriendsLoaded,
 } = useUser();
 
     const GetFriendsFunction = () => {
@@ -33,6 +34,7 @@ function Auth(){
                     console.log("Friend Data:", data);
                 }
                 setFriends(data);
+                setFriendsLoaded(true);
             }
         }))
     }
