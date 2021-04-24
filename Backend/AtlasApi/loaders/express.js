@@ -16,7 +16,9 @@ module.exports = async function expressSettings ( app,config ) {
     app.use(express.json());
     app.use(express.urlencoded({extended: true}))
     app.use(cors({
-        origin: 'http://localhost:3000'
+        "Access-Control-Allow-Origin" : 'http://localhost:3000',
+        "Access-Control-Allow-Methods": 'GET, PUT, POST, DELETE',
+        "Access-Control-Allow-Headers": 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
     }));
 
     // Load API routes

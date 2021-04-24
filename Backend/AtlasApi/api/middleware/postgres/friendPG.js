@@ -28,8 +28,6 @@ getFriends = (pool,id, callback) =>{
                 if(err) {
                     console.log(err.stack);
                 }else{
-                    console.log("Friend fetched successfully");
-                    console.log(res.rows);
                     callback(res.rows);
                 }
                 done();
@@ -72,16 +70,25 @@ updateFriend = (pool,id,req) => {
     })
 }
 
-deleteFriend = (pool,id) => {
+deleteFriend = (pool,id, req, callback) => {
 
     pool.connect((err,client,done) => {
         if (err) throw err;
 
-        client.query(queryLibrary.deleteFriend(id), (err, res) => {
+        client.query(queryLibrary.deleteFriend(id, req), (err, res) => {
             if (err) {
-                console.log(err.stack);
+                console.log("Error deleting friends with id:", `${id}${req.body.friendId}`, " || ", `${req.body.friendId}${id}`)
+                console.log("Error with Query:", queryLibrary.deleteFriend(id,req.body.friendId))
+                callback({
+                    msg:"Error deleting friend.",
+                    status: "404",
+                })
             } else {
-                console.log("User deleted successfully");
+                console.log("Users deleted successfully");
+                callback({
+                    msg:"Successfully deleted friend.",
+                    status: "200",
+                })
             }
         });
 

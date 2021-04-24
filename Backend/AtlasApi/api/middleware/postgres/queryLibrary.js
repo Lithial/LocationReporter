@@ -20,7 +20,7 @@ const locationTable = `
 
  const friendTable = `
         CREATE TABLE IF NOT EXISTS friends(
-            id serial primary key,
+            id varchar primary key,
             userId varchar NOT NULL,
             friendId varchar NOT NULL,
             CONSTRAINT sender FOREIGN KEY (userId) REFERENCES users(userID) on delete cascade on update cascade,
@@ -54,7 +54,7 @@ getPotentialFriend = (friendCode) => {
 
 getFriends = (id) => {
     return `
-     SELECT nickname, picture, country, lat, lng, timezone
+  SELECT friends.userId, nickname, picture, country, lat, lng, timezone
         FROM users
         INNER JOIN locations on users.userId = locations.userId
         INNER JOIN friends on users.userId = friends.userId
@@ -87,8 +87,8 @@ getUser = (id) => {
 
 createFriend = (id, friendId) => {
     return `
-        INSERT INTO friends (userId, friendId)
-        VALUES ('${id}','${friendId}')
+        INSERT INTO friends (id, userId, friendId)
+        VALUES ('${id}${friendId}','${id}','${friendId}')
         ON CONFLICT DO NOTHING;`
 }
 
@@ -138,6 +138,12 @@ deleteLocation = (id) => {
         WHERE userID = '${id}';`
 }
 
+deleteFriend = (userId, req) => {
+    return `
+        DELETE FROM friends
+        WHERE id IN ('${userId}${req.body.friendId}','${req.body.friendId}${userId}');`
+}
+
  module.exports = {
      getUser:getUser,
      getUserWithLocation:getUserWithLocation,
@@ -150,6 +156,7 @@ deleteLocation = (id) => {
      updateLocation:updateLocation,
      deleteUser:deleteUser,
      deleteLocation:deleteLocation,
+     deleteFriend:deleteFriend,
      updateFriendCode:updateFriendCode,
      updateShowLocation:updateShowLocation,
      userTable,
