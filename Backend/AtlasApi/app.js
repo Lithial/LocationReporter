@@ -1,6 +1,7 @@
 const config = require('./config/config')
 const express = require('express')
 const init = require('./loaders/settings')
+
 async function startServer(){
     const app = express();
 

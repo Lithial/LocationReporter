@@ -1,12 +1,16 @@
 import React, { useEffect,useState} from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import 'react-leaflet-markercluster/dist/styles.min.css';
 import "./MapRenderer.css"
 import mapIcon from "../../assets/venue_location_icon.svg"
 import L from "leaflet";
 import {useUser} from "../../contexts/UserContext";
-import FriendMarkers from "./FriendMarkers";
+import FriendMarker from "./FriendMarkers";
 import {Map} from "leaflet/dist/leaflet-src.esm";
+import {MarkerCluster} from "leaflet.markercluster/src";
+import MarkerClusterGroup from "react-leaflet-markercluster/src/react-leaflet-markercluster";
+import {Avatar} from "@material-ui/core";
 
 /*These imports need to be in this order for the map to load properly*/
 
@@ -33,7 +37,8 @@ const MapRenderer = () => {
                     subdomains={["mt0", "mt1", "mt2", "mt3"]}
                     attribution="&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors"
                     url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"/>
-                 {showLocation ?
+                <MarkerClusterGroup>
+                {showLocation ?
                     <Marker
                     position={currentCoords}
                     icon={icon}>
@@ -45,24 +50,15 @@ const MapRenderer = () => {
                 </Marker>
                     : <></>
                 }
-                {friends.length !== 0 ?
-                    friends.map((friend, index ) => {
-                        console.log(`Loading friend marker for ${friend.nickname}`)
+                    if (friends.length !== 0) {
+                    friends.map((friend, index) => {
                         return (
-                            <Marker
-                                position={[friend.lat, friend.lng]}
-                                icon={icon}
-                                key={index}
-                            >
-                                <Popup>
-                                    {friend.nickname}
-                                    <br/>
-                                    {friend.timezone}
-                                </Popup>
-                            </Marker>)
+                            <FriendMarker key={index} friend={friend}/>
+                        )
                     })
-                    : <></>
                 }
+            }
+                </MarkerClusterGroup>
             </MapContainer>
 
               {/*  {showLocation ?

@@ -26,6 +26,7 @@ module.exports = async function expressSettings ( app,config ) {
     userRoutes(app);
     friendsRoutes(app);
     locationRoutes(app);
+    
     /// catch 404 and forward to error handler
     app.use((req, res, next) => {
         const err = new Error('Not Found');

@@ -48,7 +48,7 @@ function Auth(){
                 if(DEV_MODE){
                     console.log(data);
                 }
-                if(data.status !== "404" && data!==null && isAuthenticated && !userLoaded){
+                if(data.status !== "404" && isAuthenticated && !userLoaded){
                     if(DEV_MODE) {
                         console.log("data:", data)
                         console.log("Auth User Show Location:", data.showlocation)
@@ -89,6 +89,7 @@ function Auth(){
                     console.log("No authentication to create user from");
                 }
                 setRecentChange(Date.now());
+                console.log("FINAL COORDS: ", data.lat, data.lng)
             }
         ));
     };
