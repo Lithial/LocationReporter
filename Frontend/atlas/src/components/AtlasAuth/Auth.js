@@ -1,6 +1,6 @@
 import {useAuth0} from "@auth0/auth0-react";
 import {useUser} from "../../contexts/UserContext";
-import {GetUser, GetFriends, CreateUser} from "../../api/UserCalls";
+import {GetUser, GetFriends, CreateUser, UpdateUser} from "../../api/UserCalls";
 import {useMemo} from "react";
 import {DEV_MODE} from "../../config/Config";
 
@@ -71,6 +71,13 @@ function Auth(){
                         setCurrentCoords([data.lat,data.lng]);
                     }
                     setUserLoaded(true);
+                    if(data.nickname !== user.nickname ||  data.picture !== user.picture)
+                    {
+                        UpdateUserFunction({
+                            nickname: user.nickname,
+                            picture: user.picture,
+                        })
+                    }
                 }
                 else if(isAuthenticated && data.status === "404"){
                     setNickname(user.name);
@@ -105,7 +112,17 @@ function Auth(){
             }
         }))
     }
-
+    const UpdateUserFunction = (userData) => {
+        if(DEV_MODE) {
+            console.log("Updating User discord props");
+            console.log("User data:", userData);
+        }
+        UpdateUser(getAccessTokenSilently,userData, (data => {
+            if(data != null){
+                setUserLoaded(true);
+            }
+        }))
+    }
     useMemo(()=>{
         if(isAuthenticated){
             GetUserFunction();

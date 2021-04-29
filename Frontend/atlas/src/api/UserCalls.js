@@ -218,7 +218,31 @@ export async function GetFriends(getAccessTokenSilently, callback) {
         console.log(error)
     }
 }
-
+export async function UpdateUser(getAccessTokenSilently,userData, callback ) {
+    try {
+        const token = await getAccessTokenSilently();
+        const response = await fetch(`${API_BASE_URL}/${API_USERS_ENDPOINT}/discord`, {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            mode: 'cors', // no-cors, *cors, same-origin
+            body: JSON.stringify(userData)
+        }).then(res => res.json())
+            .then(data => {
+                if(DEV_MODE) {
+                    console.log("Update response data:", data)
+                }
+                callback(data)
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    } catch (error) {
+        console.log(error)
+    }
+}
 /*const postUser = async () => {
         try {
             const token = await getAccessTokenSilently();
