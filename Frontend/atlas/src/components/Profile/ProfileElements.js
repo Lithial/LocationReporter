@@ -25,6 +25,7 @@ const ProfileElements = () => {
         setFriendCode,
         setUpdateLocation,
     } = useUser();
+
     const {getAccessTokenSilently, logout} = useAuth0();
 
     const deleteUser = async () => {
@@ -79,8 +80,7 @@ const ProfileElements = () => {
             <ProfileTextElement value={timezone || ""} text={"TimeZone: "}/>
             <ProfileTextElement value={showLocation} text={"Allow Fetch Location: :"}/>
             <ProfileFriendInput/>
-
-            <Button onClick={asyncToggleLocationAndUpdateUI}>{"Show Location:"}</Button>
+            <Button onClick={asyncToggleLocationAndUpdateUI}>{"Show Location"}</Button>
             <Button onClick={deleteUser}>{"Delete Account"}</Button>
             <Button onClick={getNewFriendCode}>{"New Code"}</Button>
 
