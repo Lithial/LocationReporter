@@ -47,6 +47,17 @@ module.exports = (app) => {
         let user = userPG.updateUser(pool, id, req);
         return res.send(req.body).status(200);
     })
+    
+    app.put('/user/discord', isAuth, (req, res) => {
+
+        const pool = getConnection();
+
+        let id = userId(req);
+        console.log('PUT |',id)
+
+        let user = userPG.updateUser(pool, id, req);
+        return res.send(req.body).status(200);
+    })
 
     app.delete('/user', isAuth, (req, res) => {
 

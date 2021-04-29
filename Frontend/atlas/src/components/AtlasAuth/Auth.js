@@ -3,6 +3,7 @@ import {useUser} from "../../contexts/UserContext";
 import {GetUser, GetFriends, CreateUser, UpdateUser} from "../../api/UserCalls";
 import {useMemo} from "react";
 import {DEV_MODE} from "../../config/Config";
+import React from "react";
 
 function Auth(){
     const { user } = useAuth0();
@@ -131,9 +132,9 @@ function Auth(){
     },[])
 
     return (
-        <div>
+        <>
 
-        </div>
+        </>
     )
 }
 export default Auth;

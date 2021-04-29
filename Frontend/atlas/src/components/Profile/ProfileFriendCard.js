@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useUser} from "../../contexts/UserContext";
 import ProfileTextElement from "./ProfileTextElement";
 import {DEV_MODE} from "../../config/Config";

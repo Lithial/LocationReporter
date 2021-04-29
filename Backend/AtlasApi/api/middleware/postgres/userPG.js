@@ -75,6 +75,21 @@ updateUser = (pool, id, req) => {
     })
 }
 
+updateDiscordProps = (pool, id, req) => {
+
+    pool.connect((err, client, done) => {
+        if (err) throw err;
+
+        client.query(queryLibrary.updateUser(id, req), (err, res) => {
+            if (err) {
+                console.log(err.stack);
+            } else {
+                console.log("User discord props updated successfully");
+            }
+        });
+        done();
+    })
+}
 deleteUser = (pool, id) => {
 
     pool.connect((err, client, done) => {

@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import ProfilePicture from "./ProfilePicture";
 import ProfileTextElement from "./ProfileTextElement";
 import {useUser} from "../../contexts/UserContext";
@@ -29,7 +29,7 @@ const ProfileElements = () => {
 
     const deleteUser = async () => {
         try{
-            DeleteUser(getAccessTokenSilently,function (){
+            await DeleteUser(getAccessTokenSilently,function (){
             })
             logout({returnTo: window.location.origin});
 
@@ -39,7 +39,7 @@ const ProfileElements = () => {
     }
     const getNewFriendCode = async () => {
         try{
-            UpdateFriendCode(getAccessTokenSilently,function (data){
+            await UpdateFriendCode(getAccessTokenSilently,function (data){
                 setFriendCode(data.friendCode)
             })
         }catch (error) {
@@ -52,7 +52,7 @@ const ProfileElements = () => {
             setShowLocation(reverseLocation)
             setUpdateLocation(reverseLocation);
             setRecentChange(Date.now())
-            UpdateShowLocation(getAccessTokenSilently,false,function(){
+            await UpdateShowLocation(getAccessTokenSilently,false,function(){
 
             });
 

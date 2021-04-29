@@ -3,6 +3,7 @@ import {useErrors} from "../../contexts/ErrorContext";
 import {Alert, AlertTitle} from "@material-ui/lab";
 
 const ErrorAlert = () => {
+
     const [errorMessage, setErrorMessage] = useErrors();
 
     useEffect(() =>{

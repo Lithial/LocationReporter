@@ -21,7 +21,7 @@ const MapIcons = (props) => {
                 const markers = cluster.getAllChildMarkers() ?? [];
                 const friends = [];
 
-                markers.forEach((value, index) => {
+                markers.forEach((value) => {
                     const html = value.options.icon.options.html
 
                     let name = html.split("alt=\"")[1];

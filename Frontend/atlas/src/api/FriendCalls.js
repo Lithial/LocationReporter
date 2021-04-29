@@ -8,7 +8,7 @@ async function PostFriendRequest (getAccessTokenSilently,friendCode, callback) {
             console.log("ApiEndpoint",`${API_BASE_URL}/${API_FRIENDS_ENDPOINT}`)
         }
         const token = await getAccessTokenSilently();
-        const response = fetch(`${API_BASE_URL}/${API_FRIENDS_ENDPOINT}`,
+        fetch(`${API_BASE_URL}/${API_FRIENDS_ENDPOINT}`,
             {
                 method: "POST",
                 headers: {
@@ -26,7 +26,7 @@ async function PostFriendRequest (getAccessTokenSilently,friendCode, callback) {
                 callback(data)
             })
     } catch (error) {
-        console.log(error)
+        console.log("Post Friend Error: ", error)
     }
 
 }

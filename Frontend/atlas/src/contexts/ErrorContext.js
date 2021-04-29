@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 
-const ErrorContext = React.createContext();
+const ErrorContext = React.createContext("");
 
 export function useErrors(){
     return useContext(ErrorContext);

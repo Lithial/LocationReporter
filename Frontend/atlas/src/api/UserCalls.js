@@ -4,7 +4,7 @@ import {API_BASE_URL, API_FRIENDS_ENDPOINT, API_USERS_ENDPOINT, API_LOCATION_END
 export async function UpdateFriendCode(getAccessTokenSilently,callback){
     try {
         const token = await getAccessTokenSilently();
-        const response = await fetch(`${API_BASE_URL}/code`, {
+        await fetch(`${API_BASE_URL}/code`, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -18,7 +18,7 @@ export async function UpdateFriendCode(getAccessTokenSilently,callback){
             })
 
     } catch (error) {
-        console.log(error)
+        console.log("Update Friend Code Error: ", error)
     }
 }
 export async function DeleteUser(getAccessTokenSilently, callback){
@@ -28,7 +28,7 @@ export async function DeleteUser(getAccessTokenSilently, callback){
             console.log(`${API_BASE_URL}/${API_USERS_ENDPOINT}`)
         }
         const token = await getAccessTokenSilently();
-        const response = await fetch(`${API_BASE_URL}/${API_USERS_ENDPOINT}`, {
+        await fetch(`${API_BASE_URL}/${API_USERS_ENDPOINT}`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -43,7 +43,7 @@ export async function DeleteUser(getAccessTokenSilently, callback){
                 console.error(error);
             });
     }catch(error){
-
+        console.log("Delete User Error: ", error)
     }
 }
 export async function DeleteFriend(getAccessTokenSilently,friendId, callback){
@@ -54,7 +54,7 @@ export async function DeleteFriend(getAccessTokenSilently,friendId, callback){
             console.log("Deleting this Id from Friends List: ", friendId)
         }
         const token = await getAccessTokenSilently();
-        const response = await fetch(`${API_BASE_URL}/${API_FRIENDS_ENDPOINT}`, {
+        await fetch(`${API_BASE_URL}/${API_FRIENDS_ENDPOINT}`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -71,7 +71,7 @@ export async function DeleteFriend(getAccessTokenSilently,friendId, callback){
                 callback(data);
             })
             .catch((error) => {
-                console.error(error);
+                console.log("Delete Friend Error: ", error)
             });
     }catch(error){
         console.log(error);
@@ -83,7 +83,7 @@ export async function UpdateLocation(getAccessTokenSilently, locationData, callb
         if(DEV_MODE){
             console.log("Location Data:", locationData)
         }
-        const response = await fetch(`${API_BASE_URL}/${API_LOCATION_ENDPOINT}`,{
+        await fetch(`${API_BASE_URL}/${API_LOCATION_ENDPOINT}`,{
             method:"PUT",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -100,10 +100,10 @@ export async function UpdateLocation(getAccessTokenSilently, locationData, callb
         })
             .then(res => res.json())
             .then(data =>{
-
+                callback(data);
             })
             .catch((error) => {
-                console.error(error);
+                console.log("Update Location Error: ", error)
             });
     }
     catch (error){
@@ -116,7 +116,7 @@ export async function UpdateShowLocation(getAccessTokenSilently, showLocation, c
         if(DEV_MODE){
             console.log("Set Show Location:", showLocation)
         }
-        const response = await fetch(`${API_BASE_URL}/${API_LOCATION_ENDPOINT}/show`,{
+        await fetch(`${API_BASE_URL}/${API_LOCATION_ENDPOINT}/show`,{
             method:"PUT",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -129,10 +129,10 @@ export async function UpdateShowLocation(getAccessTokenSilently, showLocation, c
         })
             .then(res => res.json())
             .then(data =>{
-
+                callback(data)
             })
             .catch((error) => {
-                console.error(error);
+                console.log("Update Show Location Error: ", error)
             });
     }
     catch (error){
@@ -142,7 +142,7 @@ export async function UpdateShowLocation(getAccessTokenSilently, showLocation, c
 export async function CreateUser(getAccessTokenSilently,userData, callback ) {
     try {
         const token = await getAccessTokenSilently();
-        const response = await fetch(`${API_BASE_URL}/${API_USERS_ENDPOINT}`, {
+        await fetch(`${API_BASE_URL}/${API_USERS_ENDPOINT}`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -161,7 +161,7 @@ export async function CreateUser(getAccessTokenSilently,userData, callback ) {
                 console.error(error);
             });
     } catch (error) {
-        console.log(error)
+        console.log("Create User Error: ", error)
     }
 }
 
@@ -172,7 +172,7 @@ export async function GetUser(getAccessTokenSilently, callback) {
             console.log("ApiEndpoint", `${API_BASE_URL}/${API_USERS_ENDPOINT}`)
         }
         const token = await getAccessTokenSilently();
-        const response = fetch(`${API_BASE_URL}/${API_USERS_ENDPOINT}`,
+        fetch(`${API_BASE_URL}/${API_USERS_ENDPOINT}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -188,7 +188,7 @@ export async function GetUser(getAccessTokenSilently, callback) {
             console.error(error);
         });
     } catch (error) {
-        console.log(error)
+        console.log("Get User Error: ", error)
     }
 }
 
@@ -199,7 +199,7 @@ export async function GetFriends(getAccessTokenSilently, callback) {
             console.log("ApiEndpoint", `${API_BASE_URL}/${API_FRIENDS_ENDPOINT}`)
         }
         const token = await getAccessTokenSilently();
-        const response = fetch(`${API_BASE_URL}/${API_FRIENDS_ENDPOINT}`,
+        fetch(`${API_BASE_URL}/${API_FRIENDS_ENDPOINT}`,
             {
                 'headers': {
                     'Authorization': `Bearer ${token}`,
@@ -215,13 +215,13 @@ export async function GetFriends(getAccessTokenSilently, callback) {
                 console.error(error);
             });
     } catch (error) {
-        console.log(error)
+        console.log("Get Friends Error: ", error)
     }
 }
 export async function UpdateUser(getAccessTokenSilently,userData, callback ) {
     try {
         const token = await getAccessTokenSilently();
-        const response = await fetch(`${API_BASE_URL}/${API_USERS_ENDPOINT}/discord`, {
+        await fetch(`${API_BASE_URL}/${API_USERS_ENDPOINT}/discord`, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -240,7 +240,7 @@ export async function UpdateUser(getAccessTokenSilently,userData, callback ) {
                 console.error(error);
             });
     } catch (error) {
-        console.log(error)
+        console.log("Update User Error: ", error)
     }
 }
 /*const postUser = async () => {

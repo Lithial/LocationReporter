@@ -12,7 +12,7 @@ import Auth from "./components/AtlasAuth/Auth";
 import LocationMaster from "./components/LocationFinder/LocationMaster";
 
 function App() {
-    const { isLoading, isAuthenticated } = useAuth0();
+    const { isLoading } = useAuth0();
     const {isUserLoading} = useUser();
 
   if(isLoading || isUserLoading){
