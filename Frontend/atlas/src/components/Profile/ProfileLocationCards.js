@@ -12,7 +12,7 @@ const ProfileLocationCards = () => {
             </div>
         )
     }
-    if(userData.user.country === "" || userData.user.country === undefined || userData.user.country === "undefined"){
+    if((userData.user.country === "" || userData.user.country === undefined || userData.user.country === "undefined") && !userData.user.showLocation){
         return(
             <div>
 

@@ -82,7 +82,7 @@ const Profile = () => {
             <ProfileTextElement value={userData.user.nickname} text={"Nickname: "}/>
             <ProfileTextElement value={userData.user.friendCode} text={"Current Friend Code: "}/>
             <ProfileLocationCards/>
-            <ProfileTextElement value={userData.user.showLocation} text={"Allow Fetch Location: :"}/>
+            <ProfileTextElement value={userData.user.showLocation} text={"Allow Fetch Location: "}/>
             <Button onClick={toggleShowLocation}>{"Show Location"}</Button>
             <Button onClick={deleteUser}>{"Delete Account"}</Button>
             <Button onClick={getNewFriendCode}>{"New Code"}</Button>
