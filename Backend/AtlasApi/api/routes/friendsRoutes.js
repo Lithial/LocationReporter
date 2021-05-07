@@ -11,10 +11,10 @@ module.exports = (app) => {
         const pool = getConnection();
 
         let id = userId(req);
-        console.log('GET |', id);
+        console.log('GET FRIEND |', id);
 
         let user = friendPG.getFriends(pool, id, function(data){
-            return res.send(data).status(200);
+            return res.send(data);
         });
         
     });
@@ -25,6 +25,13 @@ module.exports = (app) => {
         let id = userId(req);
         console.log('POST | FRIEND |', id)
         let getFriendId = friendPG.getFriend(pool, req, function (data) {
+            console.log("Post friend data:",data.data)
+            if(!data.data){
+                return res.send({
+                    status: 400,
+                    msg:"No friend associated with this code"
+                })
+            }
             friendPG.createFriend(pool, data.userid, id, function (response) {
                 //TODO probably need a notification of some kind here
                 console.log(`Friend added`);
@@ -33,7 +40,7 @@ module.exports = (app) => {
             friendPG.createFriend(pool, id, data.userid, function (response) {
                 console.log(`Friend added`);
                 //TODO return the friend user objects;
-                return res.send(data);
+                return res.send(response);
             });
         });
     })

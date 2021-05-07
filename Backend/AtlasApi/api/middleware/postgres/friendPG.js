@@ -8,10 +8,17 @@ getFriend = (pool,req, callback) =>{
         client.query(queryLibrary.getPotentialFriend(req.body.friendCode.toString()),
             (err,res) => {
                 if(err) {
-                    console.log(err.stack);
+                    console.log("Failed to fetch friend");
+                    callback({
+                        status: 404,
+                        msg: "Failed to fetch friend"
+                    })
                 }else{
                     console.log("Friend fetched successfully");
-                    callback(res.rows[0]);
+                    callback({
+                        status: 200,
+                        data: res.rows[0]
+                    });
                 }
                 done();
             });
@@ -42,10 +49,16 @@ createFriend = (pool,id,friendId, callback) => {
 
         client.query(queryLibrary.createFriend(id, friendId), (err, res) => {
             if (err) {
-                console.log(err.stack);
+                callback({
+                    status: 400,
+                    msg: "Failed to create friend"
+                })
             } else {
                 console.log("Friend created successfully");
-                callback(res);
+                callback({
+                    status: 200,
+                    data:res
+                });
             }
         });
 
