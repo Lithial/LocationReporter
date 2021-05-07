@@ -61,21 +61,23 @@ const MapIcons = (props) => {
 const MapRenderer = () => {
     const [zoom, setZoom] = useState(3);
     const [centrePosition, setCentrePosition] = useState([5, 176])
-    const {nickname, picture, timezone, showLocation, currentCoords, friends} = useUser();
+    const [state, dispatch] = useUser();
     
     const [iconList, setIconList] = useState([]);
     
     useEffect(() => {
-        setIconList([...friends, {
-            nickname: nickname,
-            picture: picture,
-            currentCoords: currentCoords,
-            timezone: timezone,
-            lat: currentCoords[0],
-            lng: currentCoords[1],
-            showLocation: showLocation,
-        }])
-    }, [friends, nickname, picture, currentCoords, timezone, showLocation])
+        if(state.friends){
+            setIconList([...state.friends, {
+                nickname: state.user.nickname,
+                picture: state.user.picture,
+                currentCoords: state.user.currentCoords,
+                timezone: state.user.timezone,
+                lat: state.user.lat,
+                lng: state.user.lng,
+                showLocation: state.user.showLocation,
+            }])
+        }
+    }, [state])
 
     return <div>
         <MapContainer

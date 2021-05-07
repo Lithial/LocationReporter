@@ -12,11 +12,11 @@ ReactDOM.render(
       <BrowserRouter>
           <Auth0ProviderWithHistory>
               <CssBaseline />
-              <UserContext>
-                  <ErrorContext>
-                          <App/>
-                  </ErrorContext>
-              </UserContext>
+              <ErrorContext>
+                  <UserContext>
+                      <App/>
+                  </UserContext>
+              </ErrorContext>
           </Auth0ProviderWithHistory>
       </BrowserRouter>
   </>,

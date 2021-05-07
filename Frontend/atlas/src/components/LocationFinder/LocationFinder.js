@@ -1,20 +1,17 @@
 import React, {useEffect} from 'react';
-import {useErrors} from "../../contexts/ErrorContext";
-import {useUser} from "../../contexts/UserContext";
 import {DEV_MODE} from "../../config/Config";
 import {UpdateLocation} from "../../api/UserCalls";
-import {useAuth0} from "@auth0/auth0-react";
 
-const LocationFinder = () => {
-
-    const {setCountry, setLat, setLng, setCurrentCoords, setTimezone, updateLocation, setUpdateLocation} = useUser();
-    const [errorMessage, setErrorMessage] = useErrors();
-    const { getAccessTokenSilently } = useAuth0();
-
-const GetLocationCoords = () => {
-    if(updateLocation) {
+const LocationFinder = (props) => {
+    const {showLocation} = props.userData.user;
+    const GetLocationCoords = () => {
+        console.log("Location finder state:", props)
+        if(props.userData.locationLoaded){
+            console.log("No need to run function")
+            return;
+        }
+        console.log("Fetching Location Data")
         if (navigator.geolocation) {
-            setUpdateLocation(false);
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     let lat = position.coords.latitude;
@@ -23,56 +20,70 @@ const GetLocationCoords = () => {
                     fetch(`https://geocode.xyz/${lat},${lng}?json=1`)
                         .then(response => {
                             if (!response.ok)
-                                setErrorMessage('Error Retrieving Data. Please Wait');
+                                props.setErrorMessage('Error Retrieving Data. Please Wait');
                             else
-                                setErrorMessage('')
+                                props.setErrorMessage('')
                             return response.json();
                         })
 
                         .then(data => {
-                            if (!data)
-                                setErrorMessage('Error Reading Data. Please Try Again.')
-                            else {
-                                setErrorMessage('')
+                                if (!data)
+                                    props.setErrorMessage('Error Reading Data. Please Try Again.')
+                                else {
+                                    props.setErrorMessage('')
 
-                                if (data.success !== false) {
-                                    let lat = data.latt.substring(0, data.latt.length - 3);
-                                    let lng = data.longt.substring(0, data.longt.length - 3);
-
-                                    setLng(lng);
-                                    setLat(lat);
-                                    setCountry(data.country)
-                                    setTimezone(data.timezone)
-                                    setCurrentCoords([lat, lng])
-                                    UpdateLocation( getAccessTokenSilently,{
-                                        country: data.country,
-                                        lat: lat,
-                                        lng:lng,
-                                        timezone:data.timezone,
-                                        showLocation: true
-                                    },function(){
-
-                                    })
-                                    if(DEV_MODE) {
-                                        console.log("userModel Test From Location Finder:", lat, lng)
+                                    if (data.success !== false) {
+                                        let lat = data.latt.substring(0, data.latt.length - 3);
+                                        let lng = data.longt.substring(0, data.longt.length - 3);
+                                        UpdateLocation(props.getAccessTokenSilently, {
+                                            country: data.country,
+                                            lat: lat.toString(),
+                                            lng: lng.toString(),
+                                            timezone: data.timezone,
+                                            showLocation: true
+                                        }).then(msg => {
+                                            console.log("LOCATION FINDER DATA:", data)
+                                            props.dispatch({
+                                                type: "UPDATE_USER",
+                                                payload: {
+                                                    lat: lat,
+                                                    lng: lng,
+                                                    country: data.country,
+                                                    timezone: data.timezone,
+                                                    currentCoords: [lat, lng]
+                                                }
+                                            })
+                                            props.dispatch({
+                                                type: "LOCATION_LOADED",
+                                            })
+                                        })
+                                        if (DEV_MODE) {
+                                            console.log("userModel Test From Location Finder:", lat, lng)
+                                        }
+                                    } else {
+                                        props.setErrorMessage(data.error.message)
                                     }
-                                } else {
-                                    setErrorMessage(data.error.message)
                                 }
                             }
-                        }
-                    )
+                        )
                 }
             );
         }
     }
-}
-useEffect(()=>{
-    if(DEV_MODE) {
-        console.log("Location Finder");
-    }
-    GetLocationCoords()
-},[])
+    useEffect(() => {
+        if (DEV_MODE) {
+            console.log("Location Finder");
+        }
+        GetLocationCoords()
+
+    }, [])
+    useEffect(() => {
+        if (DEV_MODE) {
+            console.log("Location Finder");
+        }
+        GetLocationCoords()
+
+    }, [showLocation])
 
     return (
         <div>

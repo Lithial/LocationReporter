@@ -2,16 +2,27 @@ import React, {useState} from 'react';
 import {Input} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import {useAuth0} from "@auth0/auth0-react";
-import PostFriendRequest from "../../api/FriendCalls";
+import {CreateFriendRequest} from "../../api/FriendCalls";
+import {useUser} from "../../contexts/UserContext";
 
 const ProfileFriendInput = () => {
     const {getAccessTokenSilently} = useAuth0();
     const [codeValue, setCodeValue] = useState("");
+    const [userData, dispatch] = useUser();
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        PostFriendRequest(getAccessTokenSilently,codeValue,function (data) {
-            console.log(data)
+        dispatch({
+            type: "UNLOAD_FRIENDS",
         })
+        CreateFriendRequest(getAccessTokenSilently,codeValue)
+            .then(data => {
+                console.log("Creating new friend: ", data);
+                dispatch({
+                    type: "CREATE_NEW_FRIENDS",
+                    payload: data,
+                })
+            })
     }
     return (
         <div>

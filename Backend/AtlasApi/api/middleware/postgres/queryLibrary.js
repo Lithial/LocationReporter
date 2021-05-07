@@ -48,7 +48,8 @@ getPotentialFriend = (friendCode) => {
     return `
         SELECT  *
         FROM users
-        WHERE currentFriendCode = '${friendCode}';
+        INNER JOIN locations on users.userId = locations.userId
+        WHERE users.currentFriendCode = '${friendCode}';
         `
 }
 

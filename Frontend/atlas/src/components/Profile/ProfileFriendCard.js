@@ -4,46 +4,49 @@ import ProfileTextElement from "./ProfileTextElement";
 import {DEV_MODE} from "../../config/Config";
 import Button from "@material-ui/core/Button";
 import {useAuth0} from "@auth0/auth0-react";
-import {DeleteFriend} from "../../api/UserCalls";
+import {DeleteFriend} from "../../api/FriendCalls";
 
 const ProfileFriendCard = () => {
-    const {friends} = useUser();
+    const [userData, dispatch] = useUser();
     const {getAccessTokenSilently} = useAuth0();
     const [updateList, setUpdateList] = useState(Date.now());
 
-    const deleteFriend = async (friendId) =>{
-        if(DEV_MODE){
-            console.log("Friend To Delete: ", friendId);
-        }
+    const deleteFriendFromDatabase = async (friendId) =>{
         try {
-            await DeleteFriend(getAccessTokenSilently, friendId, function(){
-                console.log("Friend Deleted")
-                setUpdateList(Date.now());
+            if(DEV_MODE){
+                console.log("Friend To Delete: ", friendId);
+            }
+            dispatch({
+                type: "UNLOAD_FRIENDS"
             })
-
+            await DeleteFriend(getAccessTokenSilently, friendId)
+                .then(data => {
+                    console.log("Friend Deleted: ")
+                    dispatch({
+                        type: "REMOVE_FRIEND",
+                        payload: friendId
+                    })
+                })
         }
         catch (error) {
             console.log(error)
         }
+
     }
 
-    useEffect(()=>{
-
-    },[updateList]);
-
-    if(friends.length !== 0){
+    if(userData?.friends){
         if(DEV_MODE){
             console.log("Look i have friends");
         }
         //todo make pretty grid item
         return (
-            friends.map(friend => {
+            userData.friends.map(friend => {
                 return (
                     <div key={friend.nickname}>
                         <ProfileTextElement text={"Name:"} value={friend.nickname}/>
                         <ProfileTextElement text={"Country:"} value={friend.country}/>
                         <ProfileTextElement text={"Timezone:"} value={friend.country}/>
-                        <Button onClick={() => deleteFriend(friend.userid)}>Remove Friend</Button>
+                        <Button onClick={() => deleteFriendFromDatabase(friend.userid)}>Remove Friend</Button>
                     </div>
                 )
             })

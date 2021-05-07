@@ -1,16 +1,13 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useUser} from "../../contexts/UserContext";
 import {Avatar} from "@material-ui/core";
 
 const ProfilePicture = () => {
-    const {picture, recentChange} = useUser();
-    useEffect(() =>{
-
-    },[recentChange])
+    const [userData, dispatch] = useUser();
 
     return (
         <div>
-            <Avatar src={picture} alt="Profile Picture"/>
+            <Avatar src={userData.user.picture} alt="Profile Picture"/>
         </div>
     );
 

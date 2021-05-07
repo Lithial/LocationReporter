@@ -33,7 +33,7 @@ module.exports = (app) => {
             friendPG.createFriend(pool, id, data.userid, function (response) {
                 console.log(`Friend added`);
                 //TODO return the friend user objects;
-                return res.send(response);
+                return res.send(data);
             });
         });
     })

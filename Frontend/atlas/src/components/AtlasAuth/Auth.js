@@ -1,135 +1,148 @@
 import {useAuth0} from "@auth0/auth0-react";
 import {useUser} from "../../contexts/UserContext";
-import {GetUser, GetFriends, CreateUser, UpdateUser} from "../../api/UserCalls";
+import {GetUser, CreateUser, UpdateUser} from "../../api/UserCalls";
 import {useMemo} from "react";
 import {DEV_MODE} from "../../config/Config";
 import React from "react";
+import {GetFriends} from "../../api/FriendCalls";
 
-function Auth(){
-    const { user } = useAuth0();
-    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
-    const {
-        userLoaded,
-        setNickname,
-        setPicture,
-        setShowLocation,
-        setFriendCode,
-        setCountry,
-        setLat,
-        setLng,
-        setCurrentCoords,
-        setTimezone,
-        setUserLoaded,
-        setRecentChange,
-        setFriends,
-        setFriendsLoaded,
-} = useUser();
+function Auth() {
+    const {user} = useAuth0();
+    const {isAuthenticated, getAccessTokenSilently} = useAuth0();
+    const [userData, dispatch] = useUser();
 
-    const GetFriendsFunction = () => {
+    const GetFriendsFunction = async () => {
         if(DEV_MODE){
             console.log("Getting friends list");
         }
-        GetFriends(getAccessTokenSilently, (data => {
-            if(data != null){
-                if(DEV_MODE){
-                    console.log("Friend Data:", data);
+        await GetFriends(getAccessTokenSilently)
+            .then(data => {
+                if(data) {
+                    if (DEV_MODE) {
+                        console.log("Friend Data:", data);
+                    }
+                    dispatch({
+                        type: "CREATE_FRIENDS",
+                        payload: data,
+                    })
                 }
-                setFriends(data);
-                setFriendsLoaded(true);
-            }
-        }))
+            });
     }
 
-    const GetUserFunction = () => {
-        if(DEV_MODE){
+    const GetUserFunction = async () => {
+        if (DEV_MODE) {
             console.log("Getting user info!");
         }
-        GetUser(getAccessTokenSilently,(data =>
-            {
-                if(DEV_MODE){
-                    console.log(data);
+        await GetUser(getAccessTokenSilently)
+            .then(data => {
+                return data
+            })
+            .then(data => {
+                if (DEV_MODE) {
+                    console.log("Initial User Data:", data);
+                    console.log("Status", data.status);
+                    console.log("Is Authenticated:", isAuthenticated);
                 }
-                if(data.status !== "404" && isAuthenticated && !userLoaded){
-                    if(DEV_MODE) {
+                if (data.status !== "404" && isAuthenticated) {
+                    if (DEV_MODE) {
                         console.log("data:", data)
                         console.log("Auth User Show Location:", data.showlocation)
                     }
-                    setShowLocation(JSON.parse(data.showlocation));
-                    setNickname(user.name);
-                    setPicture(user.picture);
-                    setFriendCode(data.currentfriendcode);
-                    if(!data.country){
-                        setCountry("")
-                        setLat(0);
-                        setLng(0);
-                        setTimezone("");
-                        setCurrentCoords([0,0]);
-                    }else{
-                        setCountry(data.country);
-                        setLat(data.lat);
-                        setLng(data.lng);
-                        setTimezone(data.timezone);
-                        setCurrentCoords([data.lat,data.lng]);
-                    }
-                    setUserLoaded(true);
-                    if(data.nickname !== user.nickname ||  data.picture !== user.picture)
-                    {
+                    dispatch(
+                        {
+                            type: "UPDATE_USER",
+                            payload: {
+                                nickname: user.name,
+                                picture: user.picture,
+                                showLocation: JSON.parse(data.showlocation),
+                                friendCode: data.currentfriendcode,
+                                country: data.country !== "undefined" ? data.country : "",
+                                lat: data.lat !== "undefined" ? data.lat : "",
+                                lng: data.lng !== "undefined" ? data.lng : "",
+                                currentCoords: (data.lat !== "undefined" && data.lng !== "undefined") ? [data.lat, data.lng] : "",
+                                timezone: data.timezone !== "undefined" ? data.timezone : "",
+                            }
+                        });
+                    if (data.nickname !== user.nickname || data.picture !== user.picture) {
+                        if (DEV_MODE) {
+                            console.log("Updating info from discord")
+                        }
                         UpdateUserFunction({
                             nickname: user.nickname,
                             picture: user.picture,
                         })
                     }
-                }
-                else if(isAuthenticated && data.status === "404"){
-                    setNickname(user.name);
-                    setPicture(user.picture);
-                    setShowLocation(JSON.parse('false'));
-                    setCountry("")
-                    setLat(0);
-                    setLng(0);
-                    setCurrentCoords([0,0]);
-                    setTimezone("")
-                    CreateUserFunction({
-                        nickname: user.nickname,
-                        picture: user.picture});
-                }
-                else{
+                    if (isAuthenticated && data.status === "404") {
+                        if (DEV_MODE) {
+                            console.log("Creating user from nothing")
+                        }
+                        let data = {
+                            nickname: user.name,
+                            picture: user.picture,
+                        }
+                        CreateUserFunction(data);
+                    }
+                    dispatch({
+                        type: "USER_LOADED",
+                    });
+                } else {
                     console.log("No authentication to create user from");
+                    if (isAuthenticated && data.status === "404") {
+                        if (DEV_MODE) {
+                            console.log("Creating user from nothing")
+                        }
+                        let data = {
+                            nickname: user.name,
+                            picture: user.picture,
+                        }
+                        CreateUserFunction(data);
+                    }
+
                 }
-                setRecentChange(Date.now());
-                console.log("FINAL COORDS: ", data.lat, data.lng)
-            }
-        ));
-    };
+                dispatch({
+                    type: "USER_LOADED",
+                });
+            })
+    }
     const CreateUserFunction = (userData) => {
-        if(DEV_MODE) {
+        if (DEV_MODE) {
             console.log("Creating User");
             console.log("User data:", userData);
         }
-        CreateUser(getAccessTokenSilently,userData, (data => {
-            if(data != null){
-                setFriendCode(data.currentFriendCode);
-                setUserLoaded(true);
-            }
-        }))
+        CreateUser(getAccessTokenSilently, userData)
+            .then(data => {
+                if (data != null) {
+                    console.log("Returned new data: ", data)
+                    dispatch({
+                        type: "UPDATE_USER",
+                        payload: {
+                            nickname: data.nickname,
+                            picture: data.picture,
+                            friendCode: data.currentFriendCode
+                        }
+                    });
+                }
+            })
     }
     const UpdateUserFunction = (userData) => {
-        if(DEV_MODE) {
+        if (DEV_MODE) {
             console.log("Updating User discord props");
             console.log("User data:", userData);
         }
-        UpdateUser(getAccessTokenSilently,userData, (data => {
-            if(data != null){
-                setUserLoaded(true);
+        UpdateUser(getAccessTokenSilently, userData, (data => {
+            if (data != null) {
+                console.log("Updating user information")
             }
-        }))
+        })).then(r => console.log("User updated probably"))
     }
-    useMemo(()=>{
-        if(isAuthenticated){
-            GetUserFunction();
+    useMemo(async () => {
+        if (isAuthenticated) {
+            await GetUserFunction()
+                .then(async () => await GetFriendsFunction());
         }
-        GetFriendsFunction();
-    },[])
+
+
+    }, [])
 
     return (
         <>
@@ -137,4 +150,5 @@ function Auth(){
         </>
     )
 }
+
 export default Auth;
