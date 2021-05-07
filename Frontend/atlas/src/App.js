@@ -8,12 +8,10 @@ import {LinearProgress} from "@material-ui/core";
 import { useAuth0 } from "@auth0/auth0-react";
 import ErrorAlert from "./components/auth0/ErrorAlert";
 import Auth from "./components/AtlasAuth/Auth";
-import LocationFinder from "./components/LocationFinder/LocationFinder";
-import {useUser} from "./contexts/UserContext";
-import {useErrors} from "./contexts/ErrorContext";
 
 function App() {
     const { isLoading } = useAuth0();
+
   if(isLoading){
     return <LinearProgress />;
     // @TODO: tweak this to be bigger
