@@ -4,20 +4,28 @@ import Button from "@material-ui/core/Button";
 import {useAuth0} from "@auth0/auth0-react";
 import {CreateFriendRequest} from "../../api/FriendCalls";
 import {useUser} from "../../contexts/UserContext";
+import {useErrors} from "../../contexts/ErrorContext";
 
 const ProfileFriendInput = () => {
     const {getAccessTokenSilently} = useAuth0();
     const [codeValue, setCodeValue] = useState("");
     const [userData, dispatch] = useUser();
+    const [errorMessage, setErrorMessage] = useErrors();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch({
-            type: "UNLOAD_FRIENDS",
-        })
+
         CreateFriendRequest(getAccessTokenSilently,codeValue)
             .then(data => {
                 console.log("Creating new friend: ", data);
+                if(data.status === 400){
+                    setErrorMessage(data?.msg)
+
+                    return;
+                }
+                dispatch({
+                    type: "UNLOAD_FRIENDS",
+                })
                 dispatch({
                     type: "CREATE_NEW_FRIENDS",
                     payload: data,
