@@ -1,30 +1,31 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {DEV_MODE} from "../../config/Config";
 import {UpdateLocation} from "../../api/UserCalls";
 
 const LocationFinder = (props) => {
-    const {showLocation} = props.userData.user;
-    const GetLocationCoords = () => {
-        console.log("Location finder state:", props)
-        if(props.userData.locationLoaded || !props.userData.user.country){
+    const {showLocation, country} = props.userData.user;
+    const GetLocationCoords = async() => {
+        if(props.userData.locationLoaded){
             console.log("No need to run function")
             props.dispatch({
                 type: "LOCATION_LOADED",
             })
             return;
         }
-        console.log("Fetching Location Data")
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
+            await navigator.geolocation.getCurrentPosition(
+                async (position) => {
                     let lat = position.coords.latitude;
                     let lng = position.coords.longitude;
-                    fetch(`https://geocode.xyz/${lat},${lng}?json=1`)
+
+                    await fetch(`https://geocode.xyz/${lat},${lng}?json=1`)
                         .then(response => {
-                            if (!response.ok)
+                            if (!response.ok) {
                                 props.setErrorMessage('Error Retrieving Data. Please Wait');
-                            else
+                            }
+                            else {
                                 props.setErrorMessage('')
+                            }
                             return response.json();
                         })
 
@@ -33,7 +34,6 @@ const LocationFinder = (props) => {
                                 props.setErrorMessage('Error Reading Data. Please Try Again.')
                             else {
                                 props.setErrorMessage('')
-
                                 if (data.success !== false) {
                                     let lat = data.latt.substring(0, data.latt.length - 3);
                                     let lng = data.longt.substring(0, data.longt.length - 3);
@@ -44,7 +44,6 @@ const LocationFinder = (props) => {
                                         timezone: data.timezone,
                                         showLocation: true
                                     }).then(msg => {
-                                        console.log("LOCATION FINDER DATA:", data)
                                         props.dispatch({
                                             type: "UPDATE_USER",
                                             payload: {
@@ -59,9 +58,6 @@ const LocationFinder = (props) => {
                                             type: "LOCATION_LOADED",
                                         })
                                     })
-                                    if (DEV_MODE) {
-                                        console.log("userModel Test From Location Finder:", lat, lng)
-                                    }
                                 } else {
                                     props.setErrorMessage(data.error.message)
                                 }
@@ -72,20 +68,19 @@ const LocationFinder = (props) => {
             );
         }
     }
+    const EscapeFunction =() =>{
+        props.dispatch({
+            type: "LOCATION_LOADED",
+        })
+    }
     useEffect(() => {
-        if (DEV_MODE) {
-            console.log("Location Finder");
+        if(country === null || !country){
+            GetLocationCoords()
         }
-        GetLocationCoords()
-
+        else{
+            EscapeFunction()
+        }
     }, [])
-    useEffect(() => {
-        if (DEV_MODE) {
-            console.log("Location Finder");
-        }
-        GetLocationCoords()
-
-    }, [showLocation])
 
     return (
         <div>

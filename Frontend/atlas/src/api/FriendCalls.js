@@ -35,7 +35,6 @@ export async function CreateFriendRequest (getAccessTokenSilently, friendCode) {
 export async function GetFriends(getAccessTokenSilently) {
     try {
         if(DEV_MODE) {
-            console.log("Retrieving user Data");
             console.log("ApiEndpoint", `${API_BASE_URL}/${API_FRIENDS_ENDPOINT}`)
         }
         const token = await getAccessTokenSilently();

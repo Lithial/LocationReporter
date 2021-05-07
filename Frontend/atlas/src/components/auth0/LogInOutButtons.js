@@ -52,9 +52,22 @@ export function UserMenu() {
                 open={Boolean(anchor)}
                 onClose={handleClose}
             >
-                <Link className={styles.links} to="/"><MenuItem><PublicIcon/> Map</MenuItem></Link>
-                <Link className={styles.links} to="/profile"><MenuItem><PersonIcon/> Profile</MenuItem></Link>
-                <MenuItem onClick={() => logout({returnTo: window.location.origin})}><ExitToAppIcon/> Logout</MenuItem>
+                <Link className={styles.links} to="/">
+                    <MenuItem onClick={handleClose}>
+                        <PublicIcon/>Map
+                    </MenuItem>
+                </Link>
+                <Link className={styles.links} to="/profile">
+                    <MenuItem onClick={handleClose}>
+                        <PersonIcon/> Profile
+                    </MenuItem>
+                </Link>
+                <MenuItem onClick={() => {
+                    logout({returnTo: window.location.origin})
+                    handleClose()
+                }}>
+                    <ExitToAppIcon/> Logout
+                </MenuItem>
             </Menu>
         </div>
     );

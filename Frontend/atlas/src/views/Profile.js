@@ -52,14 +52,17 @@ const Profile = () => {
         })
     }
     const toggleShowLocation = async () => {
-        console.log("Show location:", userData.user.showLocation)
         try {
-            console.log("Toggle show location")
             await flipShowLocation()
                 .then(() =>{
                     if(userData.user.showLocation){
                         dispatch({
                             type: "UNLOAD_LOCATION",
+                        })
+                    }
+                    else if(!userData.user.showLocation){
+                        dispatch({
+                            type: "LOCATION_LOADED",
                         })
                     }
                 });

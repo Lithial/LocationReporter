@@ -35,28 +35,26 @@ const ProfileFriendCard = () => {
     }
 
     if(userData?.friends){
-        if(DEV_MODE){
-            console.log("Look i have friends");
-        }
-        //todo make pretty grid item
         return (
-            userData.friends.map(friend => {
-                return (
-                    <div key={friend.nickname}>
-                        <ProfileTextElement text={"Name:"} value={friend.nickname}/>
-                        <ProfileTextElement text={"Country:"} value={friend.country}/>
-                        <ProfileTextElement text={"Timezone:"} value={friend.country}/>
-                        <Button onClick={() => deleteFriendFromDatabase(friend.userid)}>Remove Friend</Button>
-                    </div>
-                )
-            })
-        );
-    }
-    return (
-        <>
-        </>
-        )
+            <div>
 
+            </div>
+        )
+    }
+
+    //todo make pretty grid item
+    return (
+        userData.friends.map(friend => {
+            return (
+                <div key={friend.nickname}>
+                    <ProfileTextElement text={"Name:"} value={friend.nickname}/>
+                    <ProfileTextElement text={"Country:"} value={friend.country}/>
+                    <ProfileTextElement text={"Timezone:"} value={friend.country}/>
+                    <Button onClick={() => deleteFriendFromDatabase(friend.userid)}>Remove Friend</Button>
+                </div>
+            )
+        })
+    );
 };
 
 export default ProfileFriendCard;

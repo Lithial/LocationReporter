@@ -40,8 +40,6 @@ function Auth() {
             .then(data => {
                 if (DEV_MODE) {
                     console.log("Initial User Data:", data);
-                    console.log("Status", data.status);
-                    console.log("Is Authenticated:", isAuthenticated);
                 }
                 if (data.status !== "404" && isAuthenticated) {
                     if (DEV_MODE) {
@@ -97,7 +95,6 @@ function Auth() {
                         }
                         CreateUserFunction(data);
                     }
-
                 }
                 dispatch({
                     type: "USER_LOADED",

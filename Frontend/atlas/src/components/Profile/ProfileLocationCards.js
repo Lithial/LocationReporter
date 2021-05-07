@@ -6,6 +6,12 @@ import {LinearProgress} from "@material-ui/core";
 const ProfileLocationCards = () => {
     const [userData, dispatch] = useUser();
     if(!userData.locationLoaded){
+        if(!userData.user.showLocation){
+            return(
+                <div>
+
+            </div>);
+        }
         return (
             <div>
                 <LinearProgress/>
