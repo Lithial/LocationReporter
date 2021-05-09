@@ -9,7 +9,6 @@ import {DeleteFriend} from "../../api/FriendCalls";
 const ProfileFriendCard = () => {
     const [userData, dispatch] = useUser();
     const {getAccessTokenSilently} = useAuth0();
-    const [updateList, setUpdateList] = useState(Date.now());
 
     const deleteFriendFromDatabase = async (friendId) =>{
         try {
@@ -33,8 +32,7 @@ const ProfileFriendCard = () => {
         }
 
     }
-
-    if(userData?.friends){
+    if(!userData?.friends){
         return (
             <div>
 
@@ -44,13 +42,14 @@ const ProfileFriendCard = () => {
 
     //todo make pretty grid item
     return (
-        userData.friends.map(friend => {
+        userData.friends.map((friend, index) => {
             return (
-                <div key={friend.nickname}>
+                <div key={index}>
                     <ProfileTextElement text={"Name:"} value={friend.nickname}/>
                     <ProfileTextElement text={"Country:"} value={friend.country}/>
-                    <ProfileTextElement text={"Timezone:"} value={friend.country}/>
+                    <ProfileTextElement text={"Timezone:"} value={friend.timezone}/>
                     <Button onClick={() => deleteFriendFromDatabase(friend.userid)}>Remove Friend</Button>
+                    {index !== userData.friends.length -1 ? <hr/> : null}
                 </div>
             )
         })

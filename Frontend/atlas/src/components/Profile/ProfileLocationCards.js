@@ -27,7 +27,7 @@ const ProfileLocationCards = () => {
     }
     return (
         <div>
-            <ProfileTextElement value={userData.user.currentCoords} text={"Current Location: "}/>
+            <ProfileTextElement value={`lat: ${userData.user.currentCoords[0]} | lng: ${userData.user.currentCoords[1]}`} text={"Current Location: "}/>
             <ProfileTextElement value={userData.user.country} text={"Country: "}/>
             <ProfileTextElement value={userData.user.timezone} text={"TimeZone: "}/>
         </div>
