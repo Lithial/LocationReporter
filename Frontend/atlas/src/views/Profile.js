@@ -13,6 +13,9 @@ import {useErrors} from "../contexts/ErrorContext";
 import LocationFinder from "../components/LocationFinder/LocationFinder";
 import ProfileLocationCards from "../components/Profile/ProfileLocationCards";
 import {makeStyles} from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import ProfileTextElementWithCopy from "../components/Profile/ProfileTextElementWithCopy";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -130,7 +133,7 @@ const Profile = () => {
                 <div className={classes.user}>
                         <ProfilePicture/>
                         <ProfileTextElement value={userData.user.nickname} text={"Nickname: "}/>
-                        <ProfileTextElement value={userData.user.friendCode} text={"Current Friend Code: "}/>
+                        <ProfileTextElementWithCopy value={userData.user.friendCode} text={"Current Friend Code: "}/>
                         <ProfileLocationCards/>
                         <ProfileTextElement value={userData.user.showLocation ? "True" : " False"} text={"Allow Fetch Location: "}/>
                 </div>
