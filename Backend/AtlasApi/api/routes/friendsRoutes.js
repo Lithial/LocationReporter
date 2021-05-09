@@ -32,16 +32,29 @@ module.exports = (app) => {
                     msg:"No friend associated with this code"
                 })
             }
-            friendPG.createFriend(pool, data.userid, id, function (response) {
-                //TODO probably need a notification of some kind here
-                console.log(`Friend added`);
-                /*   return res.send(response);*/
-            });
-            friendPG.createFriend(pool, id, data.userid, function (response) {
-                console.log(`Friend added`);
-                //TODO return the friend user objects;
-                return res.send(response);
-            });
+            else{
+                console.log("id:",id)
+                console.log("Fid:",data.data.userid)
+                friendPG.createFriend(pool, data.data.userid, id, function (response) {
+                    //TODO probably need a notification of some kind here
+                    if(response.status === 400){
+                        console.log("Part 1 Error: ", response.error)
+                    }
+                    console.log(`Friend added`);
+                    /*   return res.send(response);*/
+                });
+                friendPG.createFriend(pool, id, data.data.userid, function (response) {
+                    if(response.status === 400){
+                        console.log("Part 2 Error: ", response.error)
+                    }
+                    console.log(`Friend added`);
+                    //TODO return the friend user objects;
+                    return res.send({
+                        status: 200,
+                        data: data.data
+                    });
+                });
+            }
         });
     })
 

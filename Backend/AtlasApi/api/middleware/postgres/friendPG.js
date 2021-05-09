@@ -20,8 +20,8 @@ getFriend = (pool,req, callback) =>{
                         data: res.rows[0]
                     });
                 }
-                done();
             });
+        done();
     })
 }
 
@@ -37,9 +37,10 @@ getFriends = (pool,id, callback) =>{
                 }else{
                     callback(res.rows);
                 }
-                done();
             });
+        done();
     })
+
 }
 
 createFriend = (pool,id,friendId, callback) => {
@@ -49,9 +50,11 @@ createFriend = (pool,id,friendId, callback) => {
 
         client.query(queryLibrary.createFriend(id, friendId), (err, res) => {
             if (err) {
+                console.log("Query: ", queryLibrary.createFriend(id, friendId))
                 callback({
                     status: 400,
-                    msg: "Failed to create friend"
+                    msg: "Failed to create friend",
+                    error: err.toString()
                 })
             } else {
                 console.log("Friend created successfully");
@@ -61,7 +64,6 @@ createFriend = (pool,id,friendId, callback) => {
                 });
             }
         });
-
         done();
     })
 }
@@ -104,7 +106,6 @@ deleteFriend = (pool,id, req, callback) => {
                 })
             }
         });
-
         done();
     })
 }

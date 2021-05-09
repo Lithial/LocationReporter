@@ -10,11 +10,12 @@ import MarkerClusterGroup from "react-leaflet-markercluster/src/react-leaflet-ma
 import {AvatarGroup} from "@material-ui/lab";
 import * as ReactDOMServer from "react-dom/server";
 import {Avatar} from "@material-ui/core";
+import {logDOM} from "@testing-library/react";
 
 /*These imports need to be in this order for the map to load properly*/
 
 const MapIcons = (props) => {
-
+    console.log("Icons:", props.icons)
     return (
         <MarkerClusterGroup iconCreateFunction={
             (cluster) => {
@@ -50,7 +51,7 @@ const MapIcons = (props) => {
             }
         } >
             {
-                props.icons.map((friend, index) => {
+                props.icons.filter(friend => friend.showlocation || friend.showLocation).map((friend, index) => {
                     return <FriendMarker key={index} friend={friend}/>
                 })
             }

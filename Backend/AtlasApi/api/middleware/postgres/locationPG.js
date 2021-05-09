@@ -23,7 +23,6 @@ updateLocation = (pool,id,req,callback) => {
             }
         });
         done();
-
     })
 }
 
@@ -50,7 +49,6 @@ updateShowLocation = (pool,id,req,callback) => {
             }
         });
         done();
-
     })
 }
 

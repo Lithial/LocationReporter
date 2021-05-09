@@ -17,7 +17,9 @@ getUserWithLocation = (pool, id, callback) => {
                 }
             })
             .catch(e => console.error(e.stack));
+        done();
     })
+
 }
 
 createUser = (pool, id, req, callback) => {
@@ -43,11 +45,11 @@ createUser = (pool, id, req, callback) => {
                 console.log("Location created successfully");
             }
         });
-        done();
         callback({
             ...req.body,
             currentFriendCode
         })
+        done();
     })
 }
 

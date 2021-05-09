@@ -55,7 +55,7 @@ getPotentialFriend = (friendCode) => {
 
 getFriends = (id) => {
     return `
-  SELECT friends.userId, nickname, picture, country, lat, lng, timezone
+  SELECT nickname, picture, country, lat, lng, timezone, showLocation
         FROM users
         INNER JOIN locations on users.userId = locations.userId
         INNER JOIN friends on users.userId = friends.userId
