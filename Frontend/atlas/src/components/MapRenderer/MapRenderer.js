@@ -15,7 +15,6 @@ import {logDOM} from "@testing-library/react";
 /*These imports need to be in this order for the map to load properly*/
 
 const MapIcons = (props) => {
-    console.log("Icons:", props.icons)
     return (
         <MarkerClusterGroup iconCreateFunction={
             (cluster) => {

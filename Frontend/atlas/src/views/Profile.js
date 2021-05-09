@@ -82,7 +82,7 @@ const Profile = () => {
                 .then(data => {
                     dispatch({
                         type: "SET_FRIEND_CODE",
-                        payload: data.friendCode,
+                        payload: data,
                     })
                 });
 
