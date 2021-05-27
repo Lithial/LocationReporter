@@ -6,7 +6,7 @@ const config = require('../../config/config')
 
 module.exports = (app) => {
 
-    app.get('/user',isAuth, async (req, res) => {
+    app.get(`${config.api?.prefix}/${config.api?.user}`,isAuth, async (req, res) => {
 
         const pool = getConnection();
 
@@ -19,7 +19,7 @@ module.exports = (app) => {
         })
     });
 
-    app.post('/user', isAuth, (req, res) => {
+    app.post(`${config.api?.prefix}/${config.api?.user}`, isAuth, (req, res) => {
 
         const pool = getConnection();
 
@@ -37,7 +37,7 @@ module.exports = (app) => {
 
     })
 
-    app.put('/user', isAuth, (req, res) => {
+    app.put(`${config.api?.prefix}/${config.api?.user}`, isAuth, (req, res) => {
 
         const pool = getConnection();
 
@@ -48,7 +48,7 @@ module.exports = (app) => {
         return res.send(req.body).status(200);
     })
     
-    app.put('/user/discord', isAuth, (req, res) => {
+    app.put(`${config.api?.prefix}/${config.api?.user}/discord`, isAuth, (req, res) => {
 
         const pool = getConnection();
 
@@ -59,7 +59,7 @@ module.exports = (app) => {
         return res.send(req.body).status(200);
     })
 
-    app.delete('/user', isAuth, (req, res) => {
+    app.delete(`${config.api?.prefix}/${config.api?.user}`, isAuth, (req, res) => {
 
         const pool = getConnection();
 
@@ -70,7 +70,7 @@ module.exports = (app) => {
         return res.send(req.body).status(200);
     })
 
-    app.put('/code', isAuth, (req, res) => {
+    app.put(`${config.api?.prefix}/${config.api?.code}`, isAuth, (req, res) => {
 
         const pool = getConnection();
 

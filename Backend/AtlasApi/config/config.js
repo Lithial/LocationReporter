@@ -36,7 +36,12 @@ module.exports = Config = {
 
     /*api details*/
     api: {
-        prefix: '/api',
+        prefix: process.env.API_ROUTE,
+        user: process.env.USER,
+        friends: process.env.FRIENDS,
+        code: process.env.CODE,
+        location: process.env.LOCATION,
+        authorised: process.env.AUTHORIZED,
     },
 
 }

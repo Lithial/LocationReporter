@@ -6,7 +6,7 @@ const config = require('../../config/config')
 
 module.exports = (app) => {
 
-    app.get('/friends', isAuth, (req, res) => {
+    app.get(`${config.api?.prefix}/${config.api?.friends}`, isAuth, (req, res) => {
 
         const pool = getConnection();
 
@@ -19,7 +19,7 @@ module.exports = (app) => {
         
     });
 
-    app.post('/friends', isAuth, (req, res) => {
+    app.post(`${config.api?.prefix}/${config.api?.friends}`, isAuth, (req, res) => {
         const pool = getConnection();
 
         let id = userId(req);
@@ -58,7 +58,7 @@ module.exports = (app) => {
         });
     })
 
-    app.put('/friends', isAuth, (req, res) => {
+    app.put(`${config.api?.prefix}/${config.api?.friends}`, isAuth, (req, res) => {
 
         const pool = getConnection();
 
@@ -69,7 +69,7 @@ module.exports = (app) => {
         return res.send(req.body).status(200);
     })
 
-    app.delete('/friends', isAuth, (req, res) => {
+    app.delete(`${config.api?.prefix}/${config.api?.friends}`, isAuth, (req, res) => {
 
         const pool = getConnection();
 

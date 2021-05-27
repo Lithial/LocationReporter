@@ -2,10 +2,11 @@ const isAuth = require("../middleware/isAuth");
 const getConnection = require('../../loaders/connection')
 const userId = require("../middleware/getUserStub");
 const locationPG = require("../middleware/postgres/locationPG")
+const config = require('../../config/config')
 
 module.exports = (app) => {
 
-    app.put('/location', isAuth, (req, res) => {
+    app.put(`${config.api?.prefix}/${config.api?.location}`, isAuth, (req, res) => {
         
         const pool = getConnection();
         let id = userId(req);
@@ -15,7 +16,7 @@ module.exports = (app) => {
            return res.send(data);
         });
     })
-    app.put('/location/show', isAuth, (req, res) => {
+    app.put(`${config.api?.prefix}/${config.api?.location}/show`, isAuth, (req, res) => {
 
         const pool = getConnection();
         let id = userId(req);
