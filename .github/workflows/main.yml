@@ -13,4 +13,4 @@ jobs:
         known_hosts: $ { { secrets.KNOWN_HOSTS } }
 
     - name: Execute test Script
-      run: ssh lithial@159.65.191.51 bash /test/update.sh
+      run: ssh lithial@159.65.191.51 bash ~/test/update.sh
