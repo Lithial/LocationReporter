@@ -1,11 +1,57 @@
 version: '3.3'
 
 services:
-    react-build:
+    db:
+      image: postgres:13.1
+      environment:
+        - POSTGRES_USER=$DB_USER
+        - POSTGRES_PASSWORD=$DB_PASSWORD
+      ports:
+        - $DB_PORT:$DB_PORT
+      volumes:
+        - ./db/data:/var/lib/postgresql/data
+        - ./db/docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+      restart: always
+      command: -p $DB_PORT
+
+    node:
+      depends_on:
+        - db
+      build:
+        context: ./node
+        dockerfile: Dockerfile
+      environment:
+        - CHOKIDAR_USEPOLLING= "true"
+        - NODE_ENV=$API_NODE_ENV
+        - PORT=$API_PORT
+        - PGHOST=office.iosoftworks.net
+        - PGPORT=$DB_PORT
+        - PGUSER=$DB_USER
+        - PGPASSWORD=$DB_PASSWORD
+        - PGDATABASE=$DB_NAME
+        - JWT_ALGO=$JWT_ALGO
+        - API_ROUTE=$API_ROUTE
+        - USER=$USER
+        - FRIENDS=$FRIENDS
+        - CODE=$CODE
+        - LOCATION=$LOCATION
+        - AUTHORIZED=$AUTHORIZED
+        - AUDIENCE=$REACT_APP_AUDIENCE
+        - DOMAIN=$REACT_APP_AUTH0_DOMAIN
+      ports:
+        - $API_PORT:$API_PORT
+      volumes:
+        - /app/node_modules
+        - ./node:/node
+        - ./logs:/root/.npm/_logs/
+      stdin_open: true
+
+    react:
         build:
             context: ./react
-            dockerfile: Dockerfile.prod
+            dockerfile: Dockerfile
         environment:
+          - CHOKIDAR_USEPOLLING= "true"
           - REACT_APP_AUTH0_DOMAIN=$REACT_APP_AUTH0_DOMAIN
           - REACT_APP_AUTH0_CLIENT_ID=$REACT_APP_AUTH0_CLIENT_ID
           - REACT_APP_AUDIENCE=$REACT_APP_AUDIENCE
@@ -13,71 +59,12 @@ services:
           - REACT_APP_API_USERS_ENDPOINT=$REACT_APP_API_USERS_ENDPOINT
           - REACT_APP_API_LOCATION_ENDPOINT=$REACT_APP_API_LOCATION_ENDPOINT
           - REACT_APP_API_FRIENDS_ENDPOINT=$REACT_APP_API_FRIENDS_ENDPOINT
-        volumes:
-          - ./react/build:/app/build
-          - /app/node_modules
-          
-    db:
-        image: postgres:13.1
-        environment:
-          - POSTGRES_USER=$DB_USER
-          - POSTGRES_PASSWORD=$DB_PASSWORD
+          - REACT_APP_API_LOCATION_ACCESS_TOKEN=$REACT_APP_API_LOCATION_ACCESS_TOKEN
         ports:
-          - $DB_PORT:$DB_PORT
+          - $UI_PORT:$UI_PORT
         volumes:
-          - ./db/data:/var/lib/postgresql/data
-          - ./db/docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
-
-        restart: always
-        command: -p $DB_PORT 
-        
-    reverseproxy:
-        image: reverseproxy
-        depends_on:
-          - nginx
-          - node
-        build:
-            context: ./nginx/reverseproxy/
-        ports:
-          - 8080:8080
-          - 8081:8081
-        restart: always
-        volumes:
-        - ./nginx/reverseproxy/certs:/etc/nginx/certs/
-
-    nginx:
-        depends_on:
-          - react-build
-        build:
-            context: ./nginx/reacthost/
-        volumes:
-          - ./react/build:/usr/share/nginx/html
-        image: nginx:alpine
-        restart: always
-
-    node:
-        restart: always
-        depends_on:
-          - db
-        build:
-            context: ./node
-            dockerfile: Dockerfile.prod
-        environment:
-          - NODE_ENV=$API_NODE_ENV
-          - PORT=$API_PORT
-          - PGHOST=db
-          - PGPORT=$DB_PORT
-          - PGUSER=$DB_USER
-          - PGPASSWORD=$DB_PASSWORD
-          - PGDATABASE=$DB_NAME
-          - JWT_ALGO=$JWT_ALGO
-          - API_ROUTE=$API_ROUTE
-          - USER=$USER
-          - FRIENDS=$FRIENDS
-          - CODE=$CODE
-          - LOCATION=$LOCATION
-          - AUTHORIZED=$AUTHORIZED
-          - AUDIENCE=$REACT_APP_AUDIENCE
-          - DOMAIN=$REACT_APP_AUTH0_DOMAIN
-        volumes:
+          - ./react:/app
           - /app/node_modules
+        stdin_open: true
+
+

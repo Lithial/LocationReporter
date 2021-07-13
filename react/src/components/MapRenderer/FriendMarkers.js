@@ -15,10 +15,12 @@ const FriendMarker = (props) => {
             timeZone: props.friend.timeZone,
             hour: "numeric",
             minute: "numeric",
+            hour12: true,
         }
-    const formatter = new Intl.DateTimeFormat([], options);
+    const formatter = new Intl.DateTimeFormat('en-US', options);
 
     return (
+
         <Marker
             position={[props.friend.lat, props.friend.lng]}
             icon={icon}
@@ -26,7 +28,9 @@ const FriendMarker = (props) => {
             <Popup>
                 {props.friend.nickname}
                 <br/>
-                {formatter.format(new Date())} ({props.friend.timezone})
+                {formatter.format(new Date())}
+                <br/>
+                {props.friend.country}
             </Popup>
         </Marker>
     )

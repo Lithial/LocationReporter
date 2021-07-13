@@ -74,6 +74,7 @@ const MapRenderer = () => {
                 lat: state.user.lat,
                 lng: state.user.lng,
                 showLocation: state.user.showLocation,
+                country: state.user.country,
             }])
         }
     }, [state])

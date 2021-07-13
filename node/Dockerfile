@@ -1,5 +1,5 @@
 FROM node:14.14
 WORKDIR /app
-COPY package*.json ./
+COPY . .
 RUN npm i
-CMD npm run dev
+CMD npm run prod
