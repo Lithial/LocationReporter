@@ -12,12 +12,12 @@ const FriendMarker = (props) => {
     });
 
     let options = {
-            timeZone: props.friend.timeZone,
+            timeZone: props.friend.timezone,
             hour: "numeric",
             minute: "numeric",
             hour12: true,
         }
-    console.log(`user: ${props.friend.nickname} | timezone: ${props.friend.timeZone} `)
+    console.log(`user: ${props.friend.nickname} | timezone: ${props.friend.timezone} `)
     const formatter = new Intl.DateTimeFormat('en-US', options);
     return (
 
