@@ -1,0 +1,18 @@
+name: CI Script
+on: 
+  push:
+    branches: [main]
+
+jobs:
+  # Deploy Process
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install SSH Key
+      uses: appleboy/ssh-action@v0.1.2
+      with:
+        host: ${{ secrets.SERVER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        username: ${{ secrets.USERNAME }}
+        script: |
+          bash ~/test/update.sh
