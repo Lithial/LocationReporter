@@ -12,7 +12,7 @@ const FriendMarker = (props) => {
     });
 
     let options = {
-            timeZone: `${props.friend.timeZone}`,
+            timeZone: props.friend.timeZone,
             hour: "numeric",
             minute: "numeric",
             hour12: true,
