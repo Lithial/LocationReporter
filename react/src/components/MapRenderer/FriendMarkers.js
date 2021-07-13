@@ -11,14 +11,14 @@ const FriendMarker = (props) => {
         className: "not-a-real-class-to-disable-background"
     });
 
-    const options = {
-            timeZone: props.friend.timeZone,
+    let options = {
+            timeZone: `${props.friend.timeZone}`,
             hour: "numeric",
             minute: "numeric",
             hour12: true,
         }
+    console.log(`user: ${props.friend.nickname} | timezone: ${props.friend.timeZone} `)
     const formatter = new Intl.DateTimeFormat('en-US', options);
-
     return (
 
         <Marker
