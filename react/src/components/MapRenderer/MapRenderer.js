@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from "react";
-import {MapContainer, TileLayer} from "react-leaflet";
+import React, {useEffect, useMemo, useState} from "react";
+import {MapContainer, Rectangle, TileLayer, useMap} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import "./MapRenderer.css"
 import L from "leaflet";
+import Leaflet from 'leaflet'
 import {useUser} from "../../contexts/UserContext";
 import FriendMarker from "./FriendMarkers";
 import MarkerClusterGroup from "react-leaflet-markercluster/src/react-leaflet-markercluster";
@@ -61,9 +62,12 @@ const MapRenderer = () => {
     const [zoom, setZoom] = useState(3);
     const [centrePosition, setCentrePosition] = useState([5, 176])
     const [state, dispatch] = useUser();
-    
     const [iconList, setIconList] = useState([]);
-    
+
+    const corner1 = Leaflet.latLng(-90, -200)
+    const corner2 = Leaflet.latLng(90, 200)
+    const bounds = Leaflet.latLngBounds(corner1, corner2)
+
     useEffect(() => {
         if(state.friends){
             setIconList([...state.friends, {
@@ -81,8 +85,12 @@ const MapRenderer = () => {
 
     return <div>
         <MapContainer
+            maxBoundsViscosity={1.0}
+            maxBounds={bounds}
             center={centrePosition}
             zoom={zoom}
+            maxZoom={13}
+            minZoom={3}
             scrollWheelZoom={true}>
             <TileLayer
                 maxZoom={20}
