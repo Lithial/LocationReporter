@@ -5,7 +5,6 @@ import {useAuth0} from "@auth0/auth0-react";
 import {CreateFriendRequest} from "../../api/FriendCalls";
 import {useUser} from "../../contexts/UserContext";
 import {useErrors} from "../../contexts/ErrorContext";
-import {logDOM} from "@testing-library/react";
 
 const ProfileFriendInput = () => {
     const {getAccessTokenSilently} = useAuth0();
