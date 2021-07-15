@@ -14,6 +14,18 @@ services:
       restart: always
       command: -p $DB_PORT
 
+    pgadmin:
+      image: dpage/pgadmin4:4.18
+      restart: always
+      environment:
+        PGADMIN_DEFAULT_EMAIL: $PGADMIN_EMAIL
+        PGADMIN_DEFAULT_PASSWORD: $PGADMIN_PASSWORD
+        PGADMIN_LISTEN_PORT: $PGADMIN_PORT
+      ports:
+        - "5000:80"
+      volumes:
+        - pgadmin-data:/var/lib/pgadmin
+
     node:
       depends_on:
         - db
@@ -24,7 +36,7 @@ services:
         - CHOKIDAR_USEPOLLING= "true"
         - NODE_ENV=$API_NODE_ENV
         - PORT=$API_PORT
-        - PGHOST=office.iosoftworks.net
+        - PGHOST=db
         - PGPORT=$DB_PORT
         - PGUSER=$DB_USER
         - PGPASSWORD=$DB_PASSWORD
@@ -66,5 +78,7 @@ services:
           - ./react:/app
           - /app/node_modules
         stdin_open: true
-
+volumes:
+    db-data:
+    pgadmin-data:
 
