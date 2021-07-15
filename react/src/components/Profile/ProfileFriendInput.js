@@ -5,6 +5,7 @@ import {useAuth0} from "@auth0/auth0-react";
 import {CreateFriendRequest} from "../../api/FriendCalls";
 import {useUser} from "../../contexts/UserContext";
 import {useErrors} from "../../contexts/ErrorContext";
+import {logDOM} from "@testing-library/react";
 
 const ProfileFriendInput = () => {
     const {getAccessTokenSilently} = useAuth0();
@@ -28,12 +29,24 @@ const ProfileFriendInput = () => {
                     return;
                 }
                 if(data.status === 200){
+                    console.log("D:" + data.data.userid)
+                    let filterCheck = userData.friends.filter(friend => friend.userid === data.data.userid).length;
+                    console.log("filterCheck: " + filterCheck)
+                    if(filterCheck !== 0)
+                    {
+                        setErrorMessage("Friend already exists");
+                        dispatch({
+                            type: "FRIENDS_LOADED",
+                        })
+                        return
+                    }
                     dispatch({
                         type: "CREATE_NEW_FRIENDS",
                         payload: data.data,
                     })
                 }
             })
+        setCodeValue("");
     }
     return (
         <div>
