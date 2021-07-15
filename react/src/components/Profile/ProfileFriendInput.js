@@ -17,19 +17,22 @@ const ProfileFriendInput = () => {
 
         CreateFriendRequest(getAccessTokenSilently,codeValue)
             .then(data => {
-                console.log("Creating new friend: ", data);
-                if(data.status === 400){
-                    setErrorMessage(data?.msg)
-
-                    return;
-                }
                 dispatch({
                     type: "UNLOAD_FRIENDS",
                 })
-                dispatch({
-                    type: "CREATE_NEW_FRIENDS",
-                    payload: data,
-                })
+                if(data.status === 400){
+                    setErrorMessage(data?.msg)
+                    dispatch({
+                        type: "FRIENDS_LOADED",
+                    })
+                    return;
+                }
+                if(data.status === 200){
+                    dispatch({
+                        type: "CREATE_NEW_FRIENDS",
+                        payload: data.data,
+                    })
+                }
             })
     }
     return (

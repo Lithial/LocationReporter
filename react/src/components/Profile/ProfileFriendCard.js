@@ -20,12 +20,25 @@ const ProfileFriendCard = () => {
             })
             await DeleteFriend(getAccessTokenSilently, friendId)
                 .then(data => {
-                    console.log("Friend Deleted: ")
-                    dispatch({
-                        type: "REMOVE_FRIEND",
-                        payload: friendId
-                    })
+                    if(data.status === "400"){
+                        dispatch({
+                            type: "FRIENDS_LOADED"
+                        })
+                    }
+                    if(data.status === "200"){
+                        console.log("Friend Deleted: ")
+                        dispatch({
+                            type: "REMOVE_FRIEND",
+                            payload: friendId
+                        })
+                    }
+
                 })
+                .catch(() => {
+                    console.error("Error Loading Friends")
+                })
+
+
         }
         catch (error) {
             console.log(error)

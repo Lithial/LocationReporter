@@ -90,7 +90,11 @@ export async function DeleteFriend(getAccessTokenSilently,friendId){
             }),
             mode: 'cors', // no-cors, *cors, same-origin
         })
-        return res.json();
+        let response = res.json();
+        if(DEV_MODE && response){
+            console.log(response)
+        }
+        return response;
     }catch(error){
         console.log(error);
     }

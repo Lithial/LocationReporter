@@ -76,6 +76,13 @@ module.exports = (app) => {
         let id = userId(req);
         console.log('DELETE |', id, '||', req.body.friendId)
 
+        if(!req.body || !req.body.friendId){
+            console.log("Problem deleting friend")
+            return res.send({
+                status: 400,
+                msg:"Problem deleting friend. Request empty"
+            })
+        }
         friendPG.deleteFriend(pool,id, req, function(response){
             return res.send(response);
         });
