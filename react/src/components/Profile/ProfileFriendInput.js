@@ -29,9 +29,7 @@ const ProfileFriendInput = () => {
                     return;
                 }
                 if(data.status === 200){
-                    console.log("D:" + data.data.userid)
                     let filterCheck = userData.friends.filter(friend => friend.userid === data.data.userid).length;
-                    console.log("filterCheck: " + filterCheck)
                     if(filterCheck !== 0)
                     {
                         setErrorMessage("Friend already exists");
